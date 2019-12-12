@@ -9,12 +9,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ConsoleApp2
 {
-    class Program
+    class Program12
     {
         static void Main(string[] args)
         {
             Console.WriteLine("Creating sites");
-            var sites = CreateSites(1000, 200);
+            var sites = CreateSites(10000, 200);
             Console.WriteLine("Creating sites done");
 
             var size =   GetObjectSize(sites);
