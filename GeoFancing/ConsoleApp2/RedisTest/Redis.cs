@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,11 +17,15 @@ namespace RedisTest
             _distributedCache = distributedCache;
         }
 
-        public T Get<T>(string key)
+        public T Get<T>(string key, ref string res)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             _distributedCache.Refresh(key);
 
             var cacheEntry = _distributedCache.GetString(key);
+            res += Environment.NewLine + "Time took to fetch from internal Reids VM in milliseconds " + stopwatch.ElapsedMilliseconds;
             return JsonConvert.DeserializeObject<T>(cacheEntry);
         }
 

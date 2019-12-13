@@ -40,7 +40,8 @@ namespace RedisTest.Controllers
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var site = _redis.Get<Site>(count.ToString());
+
+                var site = _redis.Get<Site>(count.ToString(), ref result);
 
                 var x = (count * 1 * 10) + 100;
                 var y = (count * 1 * 10) + 55;
@@ -58,8 +59,7 @@ namespace RedisTest.Controllers
                     }
                 }
 
-                stopwatch.Stop();
-                result += Environment.NewLine + "Time to serach in  milliseconds " + stopwatch.ElapsedMilliseconds;
+                result += Environment.NewLine + "Total Time in  milliseconds " + stopwatch.ElapsedMilliseconds;
             }
 
             return Ok(result);
