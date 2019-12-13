@@ -33,4 +33,12 @@ namespace ConsoleApp2
             Y = y;
         }
     }
+
+    [Serializable]
+    public class CosmoSite
+    {
+        public List<Zone> Zones { get; set; }
+        public int SiteID { get; set; }
+        public string Name { get; set; }
+    }
 }

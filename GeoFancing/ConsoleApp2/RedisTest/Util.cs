@@ -71,7 +71,7 @@ namespace ConsoleApp2
             return siteCache;
         }
 
-        static List<PloyPoint> DrawPolygon(Rectangle r)
+        public static List<PloyPoint> DrawPolygon(Rectangle r)
         {
 
             var point1 = new PloyPoint(r.X + 0.0F, r.Y + 0.0F);
