@@ -1,36 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ConsoleApp2;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace RedisTest.Controllers
 {
-    [Route("redis")]
-    public class Redis : Controller
+    [Route("filesys")]
+    public class FileSystem : Controller
     {
-
-        IDistributedCache _distributedCache;
-        RedisCache _redis;
         static bool loaded;
+        FileSystemCache _fileSystemCache;
 
-        public Redis(RedisCache redis)
+        public FileSystem(FileSystemCache fileSystemCache)
         {
-            _redis = redis;
+            _fileSystemCache = fileSystemCache;
         }
+
         // GET: /<controller>/
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if(!loaded)
+            if (!loaded)
             {
-                LoadToRdis();
+                LoadToFileSystem();
             }
 
 
@@ -41,7 +40,7 @@ namespace RedisTest.Controllers
                 stopwatch.Start();
 
 
-                var site = _redis.Get<Site>(count.ToString(), ref result);
+                var site = _fileSystemCache.Get<Site>(count.ToString(), ref result);
 
                 var x = (count * 1 * 10) + 100;
                 var y = (count * 1 * 10) + 55;
@@ -65,16 +64,15 @@ namespace RedisTest.Controllers
             return Ok(result);
         }
 
-        private void LoadToRdis()
+        private void LoadToFileSystem()
         {
             var sites = Util.CreateSites();
 
             foreach (var key in sites.Keys)
             {
-                var site = sites[key];
-                var json = JsonConvert.SerializeObject(site);
-                _redis.Put(key.ToString(), site);
+                _fileSystemCache.Put(key.ToString(), sites[key]);
             }
+
             loaded = true;
         }
     }

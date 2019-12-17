@@ -19,7 +19,7 @@ namespace RedisTest.Controllers
         {
             if (_sites == null)
             {
-                _sites = Util.CreateSites(100, 100);
+                _sites = Util.CreateSites();
             }
         }
         // GET: /<controller>/

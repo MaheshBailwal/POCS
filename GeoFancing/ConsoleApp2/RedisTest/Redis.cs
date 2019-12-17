@@ -25,20 +25,13 @@ namespace RedisTest
             _distributedCache.Refresh(key);
 
             var cacheEntry = _distributedCache.GetString(key);
-            res += Environment.NewLine + "Time took to fetch from internal Reids VM in milliseconds " + stopwatch.ElapsedMilliseconds;
+            res += Environment.NewLine + "Time took to fetch from internal Reids  in milliseconds " + stopwatch.ElapsedMilliseconds;
             return JsonConvert.DeserializeObject<T>(cacheEntry);
         }
 
         public  void Put<T>(string key, T instance)
         {
             var json = JsonConvert.SerializeObject(instance);
-
-            //var distributedCacheEntryOptions = new DistributedCacheEntryOptions
-            //{
-            //    AbsoluteExpiration = absoluteExpiration,
-            //    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15)
-            //};
-
             _distributedCache.SetString(key, json);
 
         }

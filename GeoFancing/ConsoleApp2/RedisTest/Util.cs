@@ -14,10 +14,10 @@ namespace ConsoleApp2
         static void Main12(string[] args)
         {
             Console.WriteLine("Creating sites");
-            var sites = CreateSites(10000, 200);
+            var sites = CreateSites();
             Console.WriteLine("Creating sites done");
 
-            var size =   GetObjectSize(sites);
+            var size = GetObjectSize(sites);
 
             for (var count = 1; count < 10; count++)
             {
@@ -49,8 +49,11 @@ namespace ConsoleApp2
             Console.ReadLine();
         }
 
-       public static Dictionary<int, Site> CreateSites(int sitesCount, int zonesCount)
+        public static Dictionary<int, Site> CreateSites()
         {
+            int sitesCount = 1000;
+            int zonesCount = 100;
+
             Console.WriteLine($"Creating {sitesCount} sites with {zonesCount} in each");
             var siteCache = new Dictionary<int, Site>();
 
