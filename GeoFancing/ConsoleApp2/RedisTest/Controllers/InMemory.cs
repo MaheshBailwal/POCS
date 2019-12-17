@@ -11,48 +11,25 @@ using Microsoft.AspNetCore.Mvc;
 namespace RedisTest.Controllers
 {
     [Route("mem")]
-    public class InMemory : Controller
+    public class InMemory : BaseController
     {
-        static Dictionary<int, Site> _sites;
+        static bool loaded;
+        IDataStore _dataStore;
 
-        public InMemory()
+        public InMemory(InMemoryCache inMemoryCache)
         {
-            if (_sites == null)
+            _dataStore = inMemoryCache;
+
+            if (!loaded)
             {
-                _sites = Util.CreateSites();
+                LoadData(_dataStore);
             }
         }
         // GET: /<controller>/
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            string result = "";
-            for (var count = 1; count < 10; count++)
-            {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                var site = _sites[count];
-
-                var x = (count * 1 * 10) + 100;
-                var y = (count * 1 * 10) + 55;
-
-                //check corodinates exist in rectangle
-                var zone = site.Zones.FirstOrDefault(z => z.Rectangle.Contains(x, y));
-
-                //if yes then then find whether corodiante exist in polygon
-                if (zone != null)
-                {
-                    var found = zone.PolyGon.FindPoint(x, y);
-                    if (found)
-                    {
-                        Console.WriteLine("Inside the polygon");
-                    }
-                }
-
-                stopwatch.Stop();
-                result += Environment.NewLine + "Time to serach in  milliseconds " + stopwatch.ElapsedMilliseconds;
-            }
+            var result = SerachCodrinates(_dataStore);
 
             return Ok(result);
         }

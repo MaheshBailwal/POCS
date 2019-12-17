@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RedisTest
 {
-    public class FileSystemCache
+    public class FileSystemCache : IDataStore
     {
         static string rootFolder = @"F:\SiteData";
 

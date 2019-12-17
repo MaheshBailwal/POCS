@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RedisTest
 {
-    public class RedisCache
+    public class RedisCache : IDataStore
     {
         IDistributedCache _distributedCache;
 
