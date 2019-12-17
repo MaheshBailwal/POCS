@@ -13,69 +13,28 @@ using Newtonsoft.Json;
 namespace RedisTest.Controllers
 {
     [Route("redis")]
-    public class Redis : Controller
+    public class Redis : BaseController
     {
 
-        IDistributedCache _distributedCache;
-        RedisCache _redis;
         static bool loaded;
+        IDataStore _dataStore;
 
         public Redis(RedisCache redis)
         {
-            _redis = redis;
+            _dataStore = redis;
+
+            if (!loaded)
+            {
+                LoadData(_dataStore);
+            }
         }
         // GET: /<controller>/
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if(!loaded)
-            {
-                LoadToRdis();
-            }
-
-
-            string result = "";
-            for (var count = 1; count < 10; count++)
-            {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-
-                var site = _redis.Get<Site>(count.ToString(), ref result);
-
-                var x = (count * 1 * 10) + 100;
-                var y = (count * 1 * 10) + 55;
-
-                //check corodinates exist in rectangle
-                var zone = site.Zones.FirstOrDefault(z => z.Rectangle.Contains(x, y));
-
-                //if yes then then find whether corodiante exist in polygon
-                if (zone != null)
-                {
-                    var found = zone.PolyGon.FindPoint(x, y);
-                    if (found)
-                    {
-                        Console.WriteLine("Inside the polygon");
-                    }
-                }
-
-                result += Environment.NewLine + "Total Time in  milliseconds " + stopwatch.ElapsedMilliseconds;
-            }
-
+            var result = SerachCodrinates(_dataStore);
             return Ok(result);
-        }
-
-        private void LoadToRdis()
-        {
-            var sites = Util.CreateSites(100,100);
-
-            foreach (var key in sites.Keys)
-            {
-                var site = sites[key];
-                var json = JsonConvert.SerializeObject(site);
-                _redis.Put(key.ToString(), site);
-            }
-            loaded = true;
+            
         }
     }
 }

@@ -46,6 +46,9 @@ namespace RedisTest
             });
 
             services.AddSingleton<RedisCache, RedisCache>();
+            services.AddSingleton<FileSystemCache, FileSystemCache>();
+            services.AddSingleton<InMemoryCache, InMemoryCache>();
+            
 
         }
 

@@ -20,9 +20,9 @@ namespace RedisTest.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            _distributedCache.SetString("myname", "neo");
+            //_distributedCache.SetString("myname", "neo");
 
-            var tt = _distributedCache.GetString("myname");
+            //var tt = _distributedCache.GetString("myname");
 
             return new string[] { "value1", "value2" };
         }
