@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ConsoleApp2
 {
-    class Util
+    public class Util
     {
         static void Main12(string[] args)
         {
@@ -107,6 +107,15 @@ namespace ConsoleApp2
             }
 
             return size;
+        }
+
+        public static class ConnectionString
+        {
+            private static string cName = "Server=tcp:wencodbserver.database.windows.net,1433;Initial Catalog=wencodb;Persist Security Info=False;User ID=wencoadmin;Password=P@ssword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            public static string CName
+            {
+                get => cName;
+            }
         }
     }
 }
