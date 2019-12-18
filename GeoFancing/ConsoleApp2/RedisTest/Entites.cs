@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
-namespace ConsoleApp2
+namespace RedisTest
 {
     [Serializable]
     public class Zone
@@ -17,7 +17,7 @@ namespace ConsoleApp2
     public class Site
     {
         public List<Zone> Zones { get; set; }
-        public int ID { get; set; }
+        public int SiteID { get; set; }
         public string Name { get; set; }
     }
 
@@ -34,11 +34,11 @@ namespace ConsoleApp2
         }
     }
 
-    [Serializable]
-    public class CosmoSite
-    {
-        public List<Zone> Zones { get; set; }
-        public int SiteID { get; set; }
-        public string Name { get; set; }
-    }
+    //[Serializable]
+    //public class CosmoSite
+    //{
+    //    public List<Zone> Zones { get; set; }
+    //    public int SiteID { get; set; }
+    //    public string Name { get; set; }
+    //}
 }

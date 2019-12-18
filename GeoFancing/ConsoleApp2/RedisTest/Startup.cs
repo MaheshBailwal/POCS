@@ -39,7 +39,7 @@ namespace RedisTest
                 // These settings are to connect with Azure VM
                 options.Configuration = "my-redis-cache.redis.cache.windows.net:6380,password=GC+dMrF3dWQ+FSgN9Wptie2XLOpjc+Fej3GJgezMIQg=,ssl=True,abortConnect=False";
                 options.InstanceName = "my-redis-cache.redis.cache.windows.net";
-
+                
                 // These settings are to connect with Redis installed on VM
                 //options.Configuration = appSettings.RedisCacheConfig;
                 //options.InstanceName = "OnPrimRedis";
@@ -48,6 +48,7 @@ namespace RedisTest
             services.AddSingleton<RedisCache, RedisCache>();
             services.AddSingleton<FileSystemCache, FileSystemCache>();
             services.AddSingleton<InMemoryCache, InMemoryCache>();
+            services.AddSingleton<CosmoDS, CosmoDS>();
             
 
         }

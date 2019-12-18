@@ -2,8 +2,12 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/RedisTest",
+      "sslPort": 0
+    },
     "iisExpress": {
-      "applicationUrl": "http://localhost:65186",
+      "applicationUrl": "http://localhost:65187",
       "sslPort": 0
     }
   },

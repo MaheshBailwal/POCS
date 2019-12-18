@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace ConsoleApp2
+namespace RedisTest
 {
     public class Util
     {
@@ -68,7 +68,7 @@ namespace ConsoleApp2
                     zones.Add(new Zone() { Rectangle = rectangle, PolyGon = polyGon });
                 }
 
-                siteCache[site] = new Site() { ID = site, Zones = zones }; ;
+                siteCache[site] = new Site() { SiteID = site, Zones = zones }; ;
             }
 
             return siteCache;

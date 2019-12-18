@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace RouteGeoFence
+namespace RedisTest
 {
 
     [Serializable]
