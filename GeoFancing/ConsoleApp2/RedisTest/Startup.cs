@@ -49,7 +49,8 @@ namespace RedisTest
             services.AddSingleton<FileSystemCache, FileSystemCache>();
             services.AddSingleton<InMemoryCache, InMemoryCache>();
             services.AddSingleton<CosmoDS, CosmoDS>();
-            
+            services.AddSingleton<CosmoDtls, CosmoDtls>();
+
 
         }
 

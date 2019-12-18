@@ -13,27 +13,26 @@ namespace RedisTest
 {
     public class CosmoDS : IDataStore
     {
-        static Dictionary<string, object> _sites;
-        string DatabaseName = "CosmoData";
-        string CollectionName = "Collection_CosmoData";
-        string EndpointUrl = "https://wencocosmodb1.documents.azure.com:443/";
-        string PrimaryKey = "ShpsvUeObdx5SXvRKpUSVfnFXkeHJM5R9yJQRG5JK1ZYClJYG66JOdSQkN700Mai51MqBIR2dnod1TKQHHbgFw==";
+        //static Dictionary<string, object> _sites;
+        
         DocumentClient documentClient;
+        CosmoDtls _cosmoDtls;
 
-        public CosmoDS()
+        public CosmoDS(CosmoDtls cosmoDtls)
         {
-            if (_sites == null)
-            {
-                _sites = new Dictionary<string, object>();
-            }
-            documentClient = new DocumentClient(new Uri(EndpointUrl), PrimaryKey);
+            _cosmoDtls = cosmoDtls;
+            //if (_sites == null)
+            //{
+            //    _sites = new Dictionary<string, object>();
+            //}
+            documentClient = new DocumentClient(new Uri(_cosmoDtls.EndpointUrl), _cosmoDtls.PrimaryKey);
         }
 
         public T Get<T>(string key, ref string res)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var site = documentClient.CreateDocumentQuery<Site>(UriFactory.CreateDocumentCollectionUri(DatabaseName, CollectionName))
+            var site = documentClient.CreateDocumentQuery<Site>(UriFactory.CreateDocumentCollectionUri(_cosmoDtls.DatabaseName, _cosmoDtls.CollectionName))
                        .Where(r => r.SiteID == Convert.ToInt32(key))
                        .AsEnumerable().FirstOrDefault();            
             stopwatch.Stop();
@@ -51,9 +50,9 @@ namespace RedisTest
         public async Task PutAsync<T>(string key, T instance)
         {
             string site = JsonConvert.SerializeObject(instance);
-            await documentClient.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
-            await documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(DatabaseName), new DocumentCollection { Id = CollectionName });
-            await CreateSiteDocumentIfNotExists(DatabaseName, CollectionName, site);
+            await documentClient.CreateDatabaseIfNotExistsAsync(new Database { Id = _cosmoDtls.DatabaseName });
+            await documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(_cosmoDtls.DatabaseName), new DocumentCollection { Id = _cosmoDtls.CollectionName });
+            await CreateSiteDocumentIfNotExists(_cosmoDtls.DatabaseName, _cosmoDtls.CollectionName, site);
         }
 
         private async Task CreateSiteDocumentIfNotExists(string databaseName, string collectionName, string lsite)
