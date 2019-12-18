@@ -1,56 +1,19 @@
-﻿using RouteGeoFence;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace ConsoleApp2
+namespace PerformanceTestLibrary
 {
-    class Program12
+    public class Util
     {
-        static void Main(string[] args)
+        public static Dictionary<int, Site> CreateSites()
         {
-            Console.WriteLine("Creating sites");
-            var sites = CreateSites(10000, 200);
-            Console.WriteLine("Creating sites done");
+            int sitesCount = 1000;
+            int zonesCount = 100;
 
-            var size =   GetObjectSize(sites);
-
-            for (var count = 1; count < 10; count++)
-            {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                var site = sites[count];
-
-                var x = (count * 1 * 10) + 100;
-                var y = (count * 1 * 10) + 55;
-
-                //check corodinates exist in rectangle
-                var zone = site.Zones.FirstOrDefault(z => z.Rectangle.Contains(x, y));
-
-                //if yes then then find whether corodiante exist in polygon
-                if (zone != null)
-                {
-                    var found = zone.PolyGon.FindPoint(x, y);
-                    if (found)
-                    {
-                        Console.WriteLine("Inside the polygon");
-                    }
-                }
-
-                stopwatch.Stop();
-                Console.WriteLine("Time to serach in  milliseconds " + stopwatch.ElapsedMilliseconds);
-            }
-
-            Console.ReadLine();
-        }
-
-        static Dictionary<int, Site> CreateSites(int sitesCount, int zonesCount)
-        {
             Console.WriteLine($"Creating {sitesCount} sites with {zonesCount} in each");
             var siteCache = new Dictionary<int, Site>();
 
@@ -71,7 +34,7 @@ namespace ConsoleApp2
             return siteCache;
         }
 
-        static List<PloyPoint> DrawPolygon(Rectangle r)
+        public static List<PloyPoint> DrawPolygon(Rectangle r)
         {
 
             var point1 = new PloyPoint(r.X + 0.0F, r.Y + 0.0F);

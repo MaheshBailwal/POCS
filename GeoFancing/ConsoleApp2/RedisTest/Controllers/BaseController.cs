@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using ConsoleApp2;
 using Microsoft.AspNetCore.Mvc;
+using PerformanceTestLibrary;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +20,6 @@ namespace RedisTest.Controllers
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
 
                 var site = dataStore.Get<Site>(count.ToString(), ref result);
 

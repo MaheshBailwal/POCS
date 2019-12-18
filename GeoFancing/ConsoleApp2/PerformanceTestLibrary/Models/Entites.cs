@@ -1,10 +1,8 @@
-﻿using RouteGeoFence;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 
-namespace ConsoleApp2
+namespace PerformanceTestLibrary
 {
     [Serializable]
     public class Zone
@@ -32,5 +30,13 @@ namespace ConsoleApp2
             X = x;
             Y = y;
         }
+    }
+
+    [Serializable]
+    public class CosmoSite
+    {
+        public List<Zone> Zones { get; set; }
+        public int SiteID { get; set; }
+        public string Name { get; set; }
     }
 }

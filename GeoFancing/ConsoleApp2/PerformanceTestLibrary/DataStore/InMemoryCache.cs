@@ -1,18 +1,11 @@
-﻿using ConsoleApp2;
-using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace RedisTest
+namespace PerformanceTestLibrary
 {
     public class InMemoryCache : IDataStore
     {
-
         static Dictionary<string, object> _sites;
 
         public InMemoryCache()

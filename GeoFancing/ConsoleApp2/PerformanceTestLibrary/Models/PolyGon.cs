@@ -2,14 +2,10 @@
 // On : 2 Feb 2010
 // Refernce for finding a point inside a polygon "http://alienryderflex.com/polygon/"
 
-using ConsoleApp2;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 
-namespace RouteGeoFence
+namespace PerformanceTestLibrary
 {
 
     [Serializable]

@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using ConsoleApp2;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Documents.Linq;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-using RouteGeoFence;
+using PerformanceTestLibrary;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,8 +19,7 @@ namespace RedisTest.Controllers
     public class Cosmo : Controller
     {
 
-        IDistributedCache _distributedCache;
-        RedisCache _redis;
+        IDistributedCache _distributedCache;        
         static bool loaded;
         DocumentClient documentClient;
 

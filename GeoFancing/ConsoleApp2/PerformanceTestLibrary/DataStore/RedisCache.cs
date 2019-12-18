@@ -1,20 +1,18 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace RedisTest
+namespace PerformanceTestLibrary
 {
     public class RedisCache : IDataStore
-    {
-        IDistributedCache _distributedCache;
+    {        
+        private readonly RedisConnector _redisConnector;
 
-        public RedisCache(IDistributedCache distributedCache)
-        {
-            _distributedCache = distributedCache;
+        public RedisCache(RedisConnector redisConnector)
+        {   
+           _redisConnector = redisConnector;
         }
 
         public T Get<T>(string key, ref string res)
@@ -22,17 +20,17 @@ namespace RedisTest
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            _distributedCache.Refresh(key);
-
-            var cacheEntry = _distributedCache.GetString(key);
+            IDatabase redisCache = _redisConnector.Connection;
+            var cacheEntry = redisCache.StringGet(key);
             res += Environment.NewLine + "Time took to fetch from internal Reids  in milliseconds " + stopwatch.ElapsedMilliseconds;
             return JsonConvert.DeserializeObject<T>(cacheEntry);
         }
 
         public  void Put<T>(string key, T instance)
         {
+            IDatabase redisCache = _redisConnector.Connection;            
             var json = JsonConvert.SerializeObject(instance);
-            _distributedCache.SetString(key, json);
+            redisCache.StringSet(key, json);
 
         }
     }

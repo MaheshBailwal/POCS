@@ -1,6 +1,4 @@
-﻿using ConsoleApp2;
-
-namespace RedisTest
+﻿namespace PerformanceTestLibrary
 {
     public interface IDataStore
     {

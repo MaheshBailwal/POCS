@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using PerformanceTestLibrary;
+using StackExchange.Redis;
 
 namespace RedisTest
 {
@@ -34,22 +36,20 @@ namespace RedisTest
             var appSettings = appSettingsSection.Get<AppSettings>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddDistributedRedisCache(options =>
-            {
-                // These settings are to connect with Azure VM
-                options.Configuration = "my-redis-cache.redis.cache.windows.net:6380,password=GC+dMrF3dWQ+FSgN9Wptie2XLOpjc+Fej3GJgezMIQg=,ssl=True,abortConnect=False";
-                options.InstanceName = "my-redis-cache.redis.cache.windows.net";
+            //services.AddDistributedRedisCache(options =>
+            //{
+            //    // These settings are to connect with Azure VM
+            //    options.Configuration = "my-redis-cache.redis.cache.windows.net:6380,password=GC+dMrF3dWQ+FSgN9Wptie2XLOpjc+Fej3GJgezMIQg=,ssl=True,abortConnect=False";
+            //    options.InstanceName = "my-redis-cache.redis.cache.windows.net";
 
-                // These settings are to connect with Redis installed on VM
-                //options.Configuration = appSettings.RedisCacheConfig;
-                //options.InstanceName = "OnPrimRedis";
-            });
-
+            //    // These settings are to connect with Redis installed on VM
+            //    //options.Configuration = appSettings.RedisCacheConfig;
+            //    //options.InstanceName = "OnPrimRedis";
+            //});       
+            services.AddSingleton<RedisConnector>(x => new RedisConnector(appSettings.RedisCacheConfig));
             services.AddSingleton<RedisCache, RedisCache>();
             services.AddSingleton<FileSystemCache, FileSystemCache>();
             services.AddSingleton<InMemoryCache, InMemoryCache>();
-            
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
