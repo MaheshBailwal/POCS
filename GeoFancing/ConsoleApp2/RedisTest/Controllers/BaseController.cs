@@ -13,15 +13,18 @@ namespace RedisTest.Controllers
         static bool loaded;
         IDataStore _dataStore;
 
-        protected string  SerachCodrinates(IDataStore dataStore )
+        protected string SerachCodrinates(IDataStore dataStore)
         {
             string result = "";
+            long totalFetchTime = 0;
             for (var count = 1; count < 10; count++)
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var site = dataStore.Get<Site>(count.ToString(), ref result);
+                long fetchTime;
+                var site = dataStore.Get<Site>(count.ToString(), ref result, out fetchTime);
+                totalFetchTime += fetchTime;
 
                 var x = (count * 1 * 10) + 100;
                 var y = (count * 1 * 10) + 55;
@@ -42,7 +45,7 @@ namespace RedisTest.Controllers
                 result += Environment.NewLine + "Total Time in  milliseconds " + stopwatch.ElapsedMilliseconds;
             }
 
-            return result;
+            return Environment.NewLine + $"Total aggregate fetch time from {dataStore.GetType().Name} in milliseconds " + ((decimal)totalFetchTime / 10);            
         }
 
         protected void LoadData(IDataStore dataStore)
@@ -53,7 +56,7 @@ namespace RedisTest.Controllers
             {
                 dataStore.Put(key.ToString(), sites[key]);
             }
-          
+
         }
     }
 }

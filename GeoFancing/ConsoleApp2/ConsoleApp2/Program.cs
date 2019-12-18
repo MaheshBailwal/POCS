@@ -14,11 +14,11 @@ namespace ConsoleApp2
         static void Main(string[] args)
         {
             Console.WriteLine("Creating sites");
-            var sites = Util.CreateSites();            
+            var sites = Util.CreateSites();
 
             // Create redis connector
             RedisConnector redisConnector = new RedisConnector("127.0.0.1:6379");
-            
+
             // File system data store
             IDataStore fileSystemDataStore = new FileSystemCache();
             IDataStore inMemoryCache = new InMemoryCache();
@@ -32,26 +32,27 @@ namespace ConsoleApp2
                 redisCache.Put(key.ToString(), sites[key]);
             }
 
-            Console.WriteLine("Fetching sites from File System data store");
+           // Console.WriteLine("Fetching sites from File System data store");
             FetchDataFromDataStore(fileSystemDataStore);
-            Console.WriteLine("Fetching sites from Memory Cache data store");
+          //  Console.WriteLine("Fetching sites from Memory Cache data store");
             FetchDataFromDataStore(inMemoryCache);
-            Console.WriteLine("Fetching sites from Redis Cache data store");
+         //  Console.WriteLine("Fetching sites from Redis Cache data store");
             FetchDataFromDataStore(redisCache);
             Console.ReadLine();
-        } 
-        
-        public static void FetchDataFromDataStore(IDataStore dataStore)
-        {
-            Console.WriteLine("Fetching sites from data stores");
+        }
 
+        public static long FetchDataFromDataStore(IDataStore dataStore)
+        {
+            long totalFetchTime = 0;
             for (var count = 1; count < 10; count++)
             {
                 string result = "";
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var site = dataStore.Get<Site>(count.ToString(), ref result);
+                long fetchTime;
+                var site = dataStore.Get<Site>(count.ToString(), ref result, out fetchTime);
+                totalFetchTime += fetchTime;
 
                 var x = (count * 1 * 10) + 100;
                 var y = (count * 1 * 10) + 55;
@@ -63,14 +64,15 @@ namespace ConsoleApp2
                 if (zone != null)
                 {
                     var found = zone.PolyGon.FindPoint(x, y);
-                    if (found)
-                    {
-                        Console.WriteLine("Inside the polygon");
-                    }
-                }
+                    //if (found)
+                    //{
+                    //    Console.WriteLine("Inside the polygon");
+                    //}
+                }                
+            }
 
-                Console.WriteLine("Time to serach in  milliseconds " + stopwatch.ElapsedMilliseconds);
-            }            
+            Console.WriteLine($"Total aggregate fetch time to serach from {dataStore.GetType().Name} in  milliseconds " + ((decimal)totalFetchTime / 10));
+            return totalFetchTime;
         }
     }
 }
