@@ -10,14 +10,17 @@ namespace RedisTest.Controllers
         private readonly FileSystemCache _fileSystemCache;
         private readonly InMemoryCache _inMemoryCache;
         private readonly RedisCache _redis;
+        private readonly AzuredatabaseDS _azureDB;
+        private readonly CosmoDS _cosmoDb;
         static bool loaded;
 
-        public FullTest(FileSystemCache fileSystemCache, InMemoryCache inMemoryCache, RedisCache redis)
+        public FullTest(FileSystemCache fileSystemCache, InMemoryCache inMemoryCache, RedisCache redis, AzuredatabaseDS azureDB, CosmoDS cosmoDb)
         {
             _fileSystemCache = fileSystemCache;
             _inMemoryCache = inMemoryCache;
             _redis = redis;
-
+            _azureDB = azureDB;
+            _cosmoDb = cosmoDb;
             if (!loaded)
             {
                 LoadData(_fileSystemCache);
@@ -29,10 +32,10 @@ namespace RedisTest.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = SerachCodrinates(_fileSystemCache);
-            result += SerachCodrinates(_inMemoryCache);
-            result += SerachCodrinates(_redis);
-
+            var result = SearchCordinates(_fileSystemCache);
+            result += SearchCordinates(_inMemoryCache);
+            result += SearchCordinates(_redis);
+            result += SearchCordinates(_cosmoDb);
             return Ok(result);
         }
     }

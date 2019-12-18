@@ -26,7 +26,7 @@ namespace RedisTest.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = SerachCodrinates(_dataStore);
+            var result = SearchCordinates(_dataStore);
             return Ok(result);
             
         }

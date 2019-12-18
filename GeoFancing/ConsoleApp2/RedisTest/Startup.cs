@@ -50,6 +50,11 @@ namespace RedisTest
             services.AddSingleton<RedisCache, RedisCache>();
             services.AddSingleton<FileSystemCache, FileSystemCache>();
             services.AddSingleton<InMemoryCache, InMemoryCache>();
+            services.AddSingleton<CosmoDS>(x => new CosmoDS(appSettings.CosmoDatabaseName, appSettings.CosmoCollectionName, appSettings.CosmoEndpointUrl, appSettings.CosmoPrimaryKey));
+            services.AddSingleton<SiteDBLayer>(x => new SiteDBLayer(appSettings.AzureDBConnectionString));
+            services.AddSingleton<AzuredatabaseDS, AzuredatabaseDS>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

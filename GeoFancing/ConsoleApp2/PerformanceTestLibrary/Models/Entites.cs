@@ -15,7 +15,7 @@ namespace PerformanceTestLibrary
     public class Site
     {
         public List<Zone> Zones { get; set; }
-        public int ID { get; set; }
+        public int SiteID { get; set; }
         public string Name { get; set; }
     }
 
@@ -32,11 +32,11 @@ namespace PerformanceTestLibrary
         }
     }
 
-    [Serializable]
-    public class CosmoSite
-    {
-        public List<Zone> Zones { get; set; }
-        public int SiteID { get; set; }
-        public string Name { get; set; }
-    }
+    //[Serializable]
+    //public class CosmoSite
+    //{
+    //    public List<Zone> Zones { get; set; }
+    //    public int SiteID { get; set; }
+    //    public string Name { get; set; }
+    //}
 }

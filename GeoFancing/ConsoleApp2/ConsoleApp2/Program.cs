@@ -1,6 +1,7 @@
 ﻿using PerformanceTestLibrary;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -16,13 +17,21 @@ namespace ConsoleApp2
             Console.WriteLine("Creating sites");
             var sites = Util.CreateSites();
 
+            string redisHost = ConfigurationManager.AppSettings["RedisCacheConfig"];
+            string cosmoDatabaseName = ConfigurationManager.AppSettings["CosmoDatabaseName"];
+            string cosmoCollectionName = ConfigurationManager.AppSettings["CosmoCollectionName"];
+            string cosmoEndpointUrl = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
+            string cosmoPrimaryKey = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
+            string azureDB = ConfigurationManager.AppSettings["AzureDBConnectionString"];            
+
             // Create redis connector
-            RedisConnector redisConnector = new RedisConnector("127.0.0.1:6379");
+            RedisConnector redisConnector = new RedisConnector(redisHost);
 
             // File system data store
             IDataStore fileSystemDataStore = new FileSystemCache();
             IDataStore inMemoryCache = new InMemoryCache();
             IDataStore redisCache = new RedisCache(redisConnector);
+            IDataStore cosmoDB = new CosmoDS(cosmoDatabaseName, cosmoCollectionName, cosmoEndpointUrl, cosmoPrimaryKey);
 
             Console.WriteLine("Putting sites in all data stores");
             foreach (var key in sites.Keys)
@@ -35,6 +44,7 @@ namespace ConsoleApp2
             FetchDataFromDataStore(fileSystemDataStore);          
             FetchDataFromDataStore(inMemoryCache);         
             FetchDataFromDataStore(redisCache);
+            FetchDataFromDataStore(cosmoDB);
             Console.ReadLine();
         }
 
