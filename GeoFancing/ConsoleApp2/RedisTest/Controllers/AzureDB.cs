@@ -19,36 +19,22 @@ using RouteGeoFence;
 namespace RedisTest.Controllers
 {
     [Route("azuredb")]
-    public class azuredb : Controller
+    public class azuredb : BaseController
     {
-        AzureDatabaseAccessLayer siteDB = new AzureDatabaseAccessLayer();
-        public azuredb()
-        {
+        //AzureDatabaseAccessLayer siteDB = new AzureDatabaseAccessLayer();
 
+        IDataStorebyPoint _dataStore;
+        public azuredb(AzuredatabaseDS azuredatabaseDS)
+        {
+            _dataStore = azuredatabaseDS;
         }
         // GET: /<controller>/
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-
-            string result = "";
-            for (var count = 1; count < 10; count++)
-            {
-                var x = (count * 10 * 100) * (count - 1) + 10 * count;
-                var y = (count * 10 * 100) * (count - 1) + 10 * count;
-
-                DateTime dtstart = DateTime.Now;
-                Site _site = LoadFromAzureDatabase(count, x, y);
-                double timeSpan = DateTime.Now.Subtract(dtstart).TotalMilliseconds;
-                result += Environment.NewLine + "Time to search in  milliseconds " + timeSpan + " [Site Id : " + _site.SiteID + "]";
-            }
-
-            return Ok(result);
+            var result = SearchCodrinatesfromDB(_dataStore);
+            return Ok(result);                       
         }
-
-        private Site LoadFromAzureDatabase(int siteID, int X, int Y)
-        {
-            return siteDB.GetSites(siteID, X, Y);
-        }
+        
     }
 }

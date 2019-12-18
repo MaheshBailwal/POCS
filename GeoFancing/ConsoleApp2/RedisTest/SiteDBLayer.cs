@@ -8,10 +8,17 @@ using System.Threading.Tasks;
 
 namespace RedisTest
 {
-    public class AzureDatabaseAccessLayer
-    {       
+    public class SiteDBLayer
+    {
+        AzureDatabaseDtls _azureDatabaseDtls;
+        public SiteDBLayer(AzureDatabaseDtls azureDatabaseDtls)
+        {
+            _azureDatabaseDtls = azureDatabaseDtls;
+
+        }
 
         public Site GetSites(int siteID, int X, int Y)
+
         {
             List<Site> lstSite = new List<Site>();
             int lX =0;
@@ -20,7 +27,7 @@ namespace RedisTest
             int lHeight = 0;
             Site site = new Site();
             site.Zones = new List<Zone>();
-            using (SqlConnection con = new SqlConnection(Util.ConnectionString.CName))
+            using (SqlConnection con = new SqlConnection( _azureDatabaseDtls.ConnectionString))
             {
                 SqlCommand cmd = new SqlCommand("sp_sites_get", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -34,8 +41,7 @@ namespace RedisTest
                 SqlDataReader rdr = cmd.ExecuteReader();
                 //site = new Site();
                 while (rdr.Read())
-                {
-                    
+                {                    
                     site.SiteID = Convert.ToInt32(rdr["SiteID"]);                    
                     lX= Convert.ToInt32(rdr["X"]);
                     lY = Convert.ToInt32(rdr["Y"]);

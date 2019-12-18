@@ -50,7 +50,9 @@ namespace RedisTest
             services.AddSingleton<InMemoryCache, InMemoryCache>();
             services.AddSingleton<CosmoDS, CosmoDS>();
             services.AddSingleton<CosmoDtls, CosmoDtls>();
-
+            services.AddSingleton<AzuredatabaseDS, AzuredatabaseDS>();
+            services.AddSingleton<AzureDatabaseDtls, AzureDatabaseDtls>();
+            services.AddSingleton<SiteDBLayer, SiteDBLayer>();
 
         }
 

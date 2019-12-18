@@ -39,7 +39,7 @@ namespace RedisTest.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = SerachCodrinates(_dataStore);
+            var result = SearchCodrinates(_dataStore);
             return Ok(result);            
         }        
     }

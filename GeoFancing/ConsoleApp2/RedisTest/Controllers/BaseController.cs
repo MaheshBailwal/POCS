@@ -14,8 +14,9 @@ namespace RedisTest.Controllers
     {
         static bool loaded;
         IDataStore _dataStore;
+        IDataStorebyPoint _dataStorebyPoint;
 
-        protected string  SerachCodrinates(IDataStore dataStore )
+        protected string  SearchCodrinates(IDataStore dataStore )
         {
             string result = "";
             for (var count = 1; count < 10; count++)
@@ -34,6 +35,37 @@ namespace RedisTest.Controllers
 
                 //if yes then then find whether corodiante exist in polygon
                 if (zone != null)
+                {
+                    var found = zone.PolyGon.FindPoint(x, y);
+                    if (found)
+                    {
+                        Console.WriteLine("Inside the polygon");
+                    }
+                }
+
+                result += Environment.NewLine + "Total Time in  milliseconds " + stopwatch.ElapsedMilliseconds;
+            }
+
+            return result;
+        }
+
+        protected string SearchCodrinatesfromDB(IDataStorebyPoint dataStorebypoint)
+        {
+            string result = "";
+            for (var count = 1; count < 10; count++)
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                var x = (count * 1 * 10) + 100;
+                var y = (count * 1 * 10) + 55;
+                var site = dataStorebypoint.Get<Site>(count.ToString(),x,y, ref result);
+                
+                //check corodinates exist in rectangle
+                var zone = site.Zones.FirstOrDefault();
+
+                //if yes then then find whether corodiante exist in polygon
+                if (zone != null && zone.PolyGon != null)
                 {
                     var found = zone.PolyGon.FindPoint(x, y);
                     if (found)
