@@ -31,12 +31,9 @@ namespace ConsoleApp2
                 inMemoryCache.Put(key.ToString(), sites[key]);
                 redisCache.Put(key.ToString(), sites[key]);
             }
-
-           // Console.WriteLine("Fetching sites from File System data store");
-            FetchDataFromDataStore(fileSystemDataStore);
-          //  Console.WriteLine("Fetching sites from Memory Cache data store");
-            FetchDataFromDataStore(inMemoryCache);
-         //  Console.WriteLine("Fetching sites from Redis Cache data store");
+           
+            FetchDataFromDataStore(fileSystemDataStore);          
+            FetchDataFromDataStore(inMemoryCache);         
             FetchDataFromDataStore(redisCache);
             Console.ReadLine();
         }
@@ -44,14 +41,14 @@ namespace ConsoleApp2
         public static long FetchDataFromDataStore(IDataStore dataStore)
         {
             long totalFetchTime = 0;
-            for (var count = 1; count < 10; count++)
-            {
-                string result = "";
+            int totalFetchSites = 100;
+            for (var count = 1; count < totalFetchSites; count++)
+            {                
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
                 long fetchTime;
-                var site = dataStore.Get<Site>(count.ToString(), ref result, out fetchTime);
+                var site = dataStore.Get<Site>(count.ToString(), out fetchTime);
                 totalFetchTime += fetchTime;
 
                 var x = (count * 1 * 10) + 100;
@@ -71,7 +68,7 @@ namespace ConsoleApp2
                 }                
             }
 
-            Console.WriteLine($"Total aggregate fetch time to serach from {dataStore.GetType().Name} in  milliseconds " + ((decimal)totalFetchTime / 10));
+            Console.WriteLine($"Total aggregate fetch time to serach from {dataStore.GetType().Name} in  milliseconds " + ((decimal)totalFetchTime / totalFetchSites));
             return totalFetchTime;
         }
     }

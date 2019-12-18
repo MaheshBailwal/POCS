@@ -16,14 +16,13 @@ namespace PerformanceTestLibrary
             }
         }
 
-        public T Get<T>(string key, ref string res, out long fetchTime)
+        public T Get<T>(string key, out long fetchTime)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var site = _sites[key];
             stopwatch.Stop();
-            fetchTime = stopwatch.ElapsedMilliseconds;
-            res += Environment.NewLine + "Time took to fetch from InMemory Dictionary in milliseconds " + fetchTime;
+            fetchTime = stopwatch.ElapsedMilliseconds;            
             return (T)Convert.ChangeType(site, typeof(T));
          
         }

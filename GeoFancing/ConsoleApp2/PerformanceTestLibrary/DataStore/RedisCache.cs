@@ -15,15 +15,14 @@ namespace PerformanceTestLibrary
            _redisConnector = redisConnector;
         }
 
-        public T Get<T>(string key, ref string res, out long fetchTime)
+        public T Get<T>(string key, out long fetchTime)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
             IDatabase redisCache = _redisConnector.Connection;
             var cacheEntry = redisCache.StringGet(key);
-            fetchTime = stopwatch.ElapsedMilliseconds;
-            res += Environment.NewLine + "Time took to fetch from internal Reids  in milliseconds " + fetchTime;
+            fetchTime = stopwatch.ElapsedMilliseconds;            
             return JsonConvert.DeserializeObject<T>(cacheEntry);
         }
 

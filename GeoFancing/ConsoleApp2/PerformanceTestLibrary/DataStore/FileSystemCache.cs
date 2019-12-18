@@ -17,14 +17,13 @@ namespace PerformanceTestLibrary
             }
         }
 
-        public T Get<T>(string key, ref string res, out long fetchTime)
+        public T Get<T>(string key, out long fetchTime)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var cacheEntry = File.ReadAllText(Path.Combine(rootFolder, key + ".json"));
             stopwatch.Stop();
-            fetchTime = stopwatch.ElapsedMilliseconds;
-            res += Environment.NewLine + "Time took to fetch from file system VM in milliseconds " + fetchTime;
+            fetchTime = stopwatch.ElapsedMilliseconds;            
             return JsonConvert.DeserializeObject<T>(cacheEntry);
         }
 

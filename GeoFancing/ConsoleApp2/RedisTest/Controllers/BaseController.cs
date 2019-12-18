@@ -14,16 +14,16 @@ namespace RedisTest.Controllers
         IDataStore _dataStore;
 
         protected string SerachCodrinates(IDataStore dataStore)
-        {
-            string result = "";
+        {            
             long totalFetchTime = 0;
-            for (var count = 1; count < 10; count++)
+            int totalFetchSites = 100;
+            for (var count = 1; count < totalFetchSites; count++)
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
                 long fetchTime;
-                var site = dataStore.Get<Site>(count.ToString(), ref result, out fetchTime);
+                var site = dataStore.Get<Site>(count.ToString(), out fetchTime);
                 totalFetchTime += fetchTime;
 
                 var x = (count * 1 * 10) + 100;
@@ -40,12 +40,10 @@ namespace RedisTest.Controllers
                     {
                         Console.WriteLine("Inside the polygon");
                     }
-                }
-
-                result += Environment.NewLine + "Total Time in  milliseconds " + stopwatch.ElapsedMilliseconds;
+                }                
             }
 
-            return Environment.NewLine + $"Total aggregate fetch time from {dataStore.GetType().Name} in milliseconds " + ((decimal)totalFetchTime / 10);            
+            return Environment.NewLine + $"Total aggregate fetch time from {dataStore.GetType().Name} in milliseconds " + ((decimal)totalFetchTime / totalFetchSites);            
         }
 
         protected void LoadData(IDataStore dataStore)

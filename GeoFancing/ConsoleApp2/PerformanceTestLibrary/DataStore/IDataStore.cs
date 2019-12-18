@@ -2,7 +2,7 @@
 {
     public interface IDataStore
     {
-        T Get<T>(string key, ref string res, out long fetchTime);
+        T Get<T>(string key, out long fetchTime);
         void Put<T>(string key, T instance);
     }
 }
