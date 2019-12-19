@@ -10,11 +10,11 @@ namespace RedisTest.Controllers
         private readonly FileSystemCache _fileSystemCache;
         private readonly InMemoryCache _inMemoryCache;
         private readonly RedisCache _redis;
-        private readonly AzuredatabaseDS _azureDB;
+        private readonly AzureSql _azureDB;
         private readonly CosmoDS _cosmoDb;
         static bool loaded;
 
-        public FullTest(FileSystemCache fileSystemCache, InMemoryCache inMemoryCache, RedisCache redis, AzuredatabaseDS azureDB, CosmoDS cosmoDb)
+        public FullTest(FileSystemCache fileSystemCache, InMemoryCache inMemoryCache, RedisCache redis, AzureSql azureDB, CosmoDS cosmoDb)
         {
             _fileSystemCache = fileSystemCache;
             _inMemoryCache = inMemoryCache;

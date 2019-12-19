@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace PerformanceTestLibrary
 {
-    public class AzuredatabaseDS : IDataStorebyPoint
+    public class AzureSql : IDataStorebyPoint
     {        
         SiteDBLayer _SiteDBLayer;
 
-        public AzuredatabaseDS(SiteDBLayer SiteDBLayer)
+        public AzureSql(SiteDBLayer SiteDBLayer)
         {            
             _SiteDBLayer = SiteDBLayer;
         }

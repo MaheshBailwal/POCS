@@ -13,7 +13,7 @@ namespace RedisTest.Controllers
 
         IDataStorebyPoint _dataStore;
 
-        public azuredb(AzuredatabaseDS azuredatabaseDS)
+        public azuredb(AzureSql azuredatabaseDS)
         {
             _dataStore = azuredatabaseDS;
         }

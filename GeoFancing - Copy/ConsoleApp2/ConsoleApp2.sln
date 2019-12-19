@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{53ADCCFA-2952-4A9B-BB20-921367B3DC83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleHost", "ConsoleApp2\ConsoleHost.csproj", "{53ADCCFA-2952-4A9B-BB20-921367B3DC83}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisTest", "RedisTest\RedisTest.csproj", "{888390C4-058A-4122-B94F-A60BE4EE4142}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebHost", "RedisTest\WebHost.csproj", "{888390C4-058A-4122-B94F-A60BE4EE4142}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceTestLibrary", "PerformanceTestLibrary\PerformanceTestLibrary.csproj", "{E1A96F5F-285C-4A25-968A-57F460DF2E42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceTestLibrary", "PerformanceTestLibrary\PerformanceTestLibrary.csproj", "{E1A96F5F-285C-4A25-968A-57F460DF2E42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

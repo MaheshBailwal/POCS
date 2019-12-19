@@ -32,7 +32,7 @@ namespace ConsoleApp2
             IDataStore fileSystemDataStore = new FileSystemCache();
             IDataStore inMemoryCache = new InMemoryCache();
             IDataStore redisCache = new RedisCache(redisConnector);
-            IDataStorebyPoint azureDB = new AzuredatabaseDS(azureDBLayer);
+            IDataStorebyPoint azureDB = new AzureSql(azureDBLayer);
             IDataStore cosmoDB = new CosmoDS(cosmoDatabaseName, cosmoCollectionName, cosmoEndpointUrl, cosmoPrimaryKey);
 
             Console.WriteLine("Putting sites in all data stores");
@@ -74,10 +74,6 @@ namespace ConsoleApp2
                 if (zone != null)
                 {
                     var found = zone.PolyGon.FindPoint(x, y);
-                    //if (found)
-                    //{
-                    //    Console.WriteLine("Inside the polygon");
-                    //}
                 }                
             }
 
