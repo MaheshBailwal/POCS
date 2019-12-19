@@ -38,9 +38,9 @@ namespace ConsoleApp2
             Console.WriteLine("Putting sites in all data stores");
             foreach (var key in sites.Keys)
             {
-                //fileSystemDataStore.Put(key.ToString(), sites[key]);
+                fileSystemDataStore.Put(key.ToString(), sites[key]);
                 inMemoryCache.Put(key.ToString(), sites[key]);
-               // redisCache.Put(key.ToString(), sites[key]);
+                redisCache.Put(key.ToString(), sites[key]);
             }
 
             FetchDataFromDataStore(fileSystemDataStore);
