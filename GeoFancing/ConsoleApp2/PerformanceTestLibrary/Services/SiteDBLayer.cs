@@ -25,14 +25,10 @@ namespace PerformanceTestLibrary
             site.Zones = new List<Zone>();
             using (SqlConnection con = new SqlConnection( _connectionString))
             {
-                SqlCommand cmd = new SqlCommand("sp_sites_get", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@siteid", SqlDbType.Int);
-                cmd.Parameters.Add("@x", SqlDbType.Int);
-                cmd.Parameters.Add("@y", SqlDbType.Int);
-                cmd.Parameters["@siteid"].Value = siteID;
-                cmd.Parameters["@x"].Value = X;
-                cmd.Parameters["@y"].Value = Y;
+                string strSQL = "select SiteID,X,Y,Width, Height from [Site_Zone] where SiteID=" + siteID + " and (" + X + ">=X and " +
+                    X + "<=(X + Width)) and (" + Y + ">=Y and " + Y + "<= (Y + Height))";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.CommandType = CommandType.Text;                
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
                 //site = new Site();
