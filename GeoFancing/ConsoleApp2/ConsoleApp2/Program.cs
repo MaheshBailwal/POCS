@@ -22,28 +22,31 @@ namespace ConsoleApp2
             string cosmoCollectionName = ConfigurationManager.AppSettings["CosmoCollectionName"];
             string cosmoEndpointUrl = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
             string cosmoPrimaryKey = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
-            string azureDB = ConfigurationManager.AppSettings["AzureDBConnectionString"];            
+            string azureDBConnectionString = ConfigurationManager.AppSettings["AzureDBConnectionString"];            
 
             // Create redis connector
             RedisConnector redisConnector = new RedisConnector(redisHost);
+            SiteDBLayer azureDBLayer = new SiteDBLayer(azureDBConnectionString);
 
             // File system data store
             IDataStore fileSystemDataStore = new FileSystemCache();
             IDataStore inMemoryCache = new InMemoryCache();
             IDataStore redisCache = new RedisCache(redisConnector);
+            IDataStorebyPoint azureDB = new AzuredatabaseDS(azureDBLayer);
             IDataStore cosmoDB = new CosmoDS(cosmoDatabaseName, cosmoCollectionName, cosmoEndpointUrl, cosmoPrimaryKey);
 
             Console.WriteLine("Putting sites in all data stores");
             foreach (var key in sites.Keys)
             {
-                fileSystemDataStore.Put(key.ToString(), sites[key]);
+                //fileSystemDataStore.Put(key.ToString(), sites[key]);
                 inMemoryCache.Put(key.ToString(), sites[key]);
-                redisCache.Put(key.ToString(), sites[key]);
+               // redisCache.Put(key.ToString(), sites[key]);
             }
-           
-            FetchDataFromDataStore(fileSystemDataStore);          
-            FetchDataFromDataStore(inMemoryCache);         
+
+            FetchDataFromDataStore(fileSystemDataStore);
+            FetchDataFromDataStore(inMemoryCache);
             FetchDataFromDataStore(redisCache);
+            FetchDataFromAzureDB(azureDB);
             FetchDataFromDataStore(cosmoDB);
             Console.ReadLine();
         }
@@ -79,6 +82,37 @@ namespace ConsoleApp2
             }
 
             Console.WriteLine($"Total aggregate fetch time to serach from {dataStore.GetType().Name} in  milliseconds " + ((decimal)totalFetchTime / totalFetchSites));
+            return totalFetchTime;
+        }
+
+        public static long FetchDataFromAzureDB(IDataStorebyPoint dataStorebypoint)
+        {
+            long totalFetchTime = 0;
+            for (var count = 1; count < 10; count++)
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                long fetchTime;
+                var x = (count * 1 * 10) + 100;
+                var y = (count * 1 * 10) + 55;
+                var site = dataStorebypoint.Get<Site>(count.ToString(), x, y, out fetchTime);
+                totalFetchTime += fetchTime;
+
+                //check corodinates exist in rectangle
+                var zone = site.Zones.FirstOrDefault();
+
+                //if yes then then find whether corodiante exist in polygon
+                if (zone != null && zone.PolyGon != null)
+                {
+                    var found = zone.PolyGon.FindPoint(x, y);
+                    if (found)
+                    {
+                        Console.WriteLine("Inside the polygon");
+                    }
+                }
+            }
+
+            Console.WriteLine($"Total aggregate fetch time from {dataStorebypoint.GetType().Name} in milliseconds " + ((decimal)totalFetchTime / 10));
             return totalFetchTime;
         }
     }
