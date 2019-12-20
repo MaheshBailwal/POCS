@@ -6,12 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.9.2" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PerformanceTestLibrary\PerformanceTestLibrary.csproj" />
+    <ProjectReference Include="..\..\PerformanceTestLibraryCore\PerformanceTestLibraryCore.csproj" />
   </ItemGroup>
 
 </Project>
