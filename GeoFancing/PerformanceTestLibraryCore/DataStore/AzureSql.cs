@@ -16,11 +16,12 @@ namespace PerformanceTestLibrary
             _SiteDBLayer = SiteDBLayer;
         }
 
-        public T Get<T>(string key, int X, int Y, out double fetchTime)
+        public T Get<T>(string key, int X, int Y, int width, int height, out double fetchTime)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var site = _SiteDBLayer.GetSites(Convert.ToInt32(key), X, Y).ToList();
+            
             stopwatch.Stop();
 
             fetchTime = stopwatch.Elapsed.TotalMilliseconds;

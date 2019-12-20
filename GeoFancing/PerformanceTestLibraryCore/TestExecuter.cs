@@ -43,7 +43,7 @@ namespace PerformanceTestLibrary
                         metrics[DataStoreType.FileSystem] = RunTest(new FileSystemCache());
                         break;
                     case DataStoreType.Cosmo:
-                        INonQueryableDataStore cosmoDB = new CosmoDS(parameters["CosmoDatabaseName"],
+                        IQueryableDataStore cosmoDB = new CosmoDS(parameters["CosmoDatabaseName"],
                             parameters["CosmoCollectionName"],
                             parameters["CosmoEndpointUrl"],
                             parameters["CosmoPrimaryKey"]);
@@ -94,13 +94,15 @@ namespace PerformanceTestLibrary
 
                 var x = (count * 1 * 10) + 100;
                 var y = (count * 1 * 10) + 55;
+                int width = 100;
+                int height = 100;
 
                 double fetchTime;
 
                 if (isQueryableDataStore)
                 {
                     var queryableDataStore = (IQueryableDataStore)dataStore;
-                    zones = queryableDataStore.Get<List<Zone>>(count.ToString(), x, y, out fetchTime);
+                    zones = queryableDataStore.Get<List<Zone>>(count.ToString(), x, y,width, height, out fetchTime);
                 }
                 else
                 {
