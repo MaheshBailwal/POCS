@@ -36,7 +36,7 @@ namespace RedisTest.Controllers
             result += SearchCordinates(_inMemoryCache);
             result += SearchCordinates(_redis);
             result += SearchCodrinatesfromDB(_azureDB);
-            result += SearchCordinates(_cosmoDb);
+            result += SearchCodrinatesfromDB(_cosmoDb);
             return Ok(result);
         }
     }

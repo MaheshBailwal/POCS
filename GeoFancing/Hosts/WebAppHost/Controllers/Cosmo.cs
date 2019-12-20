@@ -9,7 +9,7 @@ namespace RedisTest.Controllers
     [Route("cosmo")]
     public class Cosmo : BaseController
     {
-        INonQueryableDataStore _dataStore;
+        IQueryableDataStore _dataStore;
 
         static bool loaded;        
 
@@ -27,7 +27,7 @@ namespace RedisTest.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = SearchCordinates(_dataStore);
+            var result = SearchCodrinatesfromDB(_dataStore);
             return Ok(result);            
         }        
     }

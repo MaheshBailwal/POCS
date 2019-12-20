@@ -57,7 +57,7 @@ namespace RedisTest.Controllers
                 double fetchTime;
                 var x = (count * 1 * 10) + 100;
                 var y = (count * 1 * 10) + 55;
-                var site = dataStorebypoint.Get<Site>(count.ToString(),x,y, out fetchTime);
+                var site = dataStorebypoint.Get<Site>(count.ToString(),x,y,100,100, out fetchTime);
                 totalFetchTime += fetchTime;
 
                 //check corodinates exist in rectangle
@@ -86,6 +86,6 @@ namespace RedisTest.Controllers
                 dataStore.Put(key.ToString(), sites[key]);
             }
 
-        }
+        }        
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PerformanceTestLibrary
 {
-    public class CosmoDS : INonQueryableDataStore
+    public class CosmoDS : IQueryableDataStore
     {
         private readonly string _databaseName;
         private readonly string _collectionName;
@@ -28,13 +28,13 @@ namespace PerformanceTestLibrary
             documentClient = new DocumentClient(new Uri(_endPointUrl), _primaryKey);
         }
 
-        public T Get<T>(string key, out double fetchTime)
+        public T Get<T>(string key,int X, int Y, int width, int height, out double fetchTime)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var site = documentClient.CreateDocumentQuery<Site>(UriFactory.CreateDocumentCollectionUri(_databaseName, _collectionName))
                        .Where(r => r.SiteID == Convert.ToInt32(key))
-                       .AsEnumerable().FirstOrDefault();             
+                       .AsEnumerable().FirstOrDefault().Zones.Where(r => (r.Rectangle.X >= X && r.Rectangle.X <= X+width) && (r.Rectangle.Y >= Y && r.Rectangle.X <=Y+height));
             stopwatch.Stop();
             fetchTime = stopwatch.Elapsed.TotalMilliseconds;            
             return (T)Convert.ChangeType(site, typeof(T));
