@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PerformanceTestLibrary
 {
-    public class AzureSql : IDataStorebyPoint
+    public class AzureSql : IQueryableDataStore
     {        
         SiteDBLayer _SiteDBLayer;
 

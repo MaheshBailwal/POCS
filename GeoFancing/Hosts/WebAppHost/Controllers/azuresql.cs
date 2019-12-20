@@ -9,7 +9,7 @@ namespace RedisTest.Controllers
     [Route("azuresql")]
     public class AzureSQL : BaseController
     {
-        IDataStorebyPoint _dataStore;
+        IQueryableDataStore _dataStore;
 
         public AzureSQL(AzureSql azuredatabaseDS)
         {

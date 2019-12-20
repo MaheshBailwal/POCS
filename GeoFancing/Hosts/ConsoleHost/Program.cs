@@ -33,7 +33,7 @@ namespace ConsoleApp2
             IDataStore fileSystemDataStore = new FileSystemCache();
             IDataStore inMemoryCache = new InMemoryCache();
             IDataStore redisCache = new RedisCache(redisConnector);
-            IDataStorebyPoint azureDB = new AzureSql(azureDBLayer);
+            IQueryableDataStore azureDB = new AzureSql(azureDBLayer);
             IDataStore cosmoDB = new CosmoDS(cosmoDatabaseName, cosmoCollectionName, cosmoEndpointUrl, cosmoPrimaryKey);
 
 
@@ -51,7 +51,11 @@ namespace ConsoleApp2
             TestExecuter testExecuter = new TestExecuter(ProgressNotifiactionHandler, 10, 10, 5);
 
 
-            var response = testExecuter.ExecuteTest(dic, new[] { DataStoreType.FileSystem, DataStoreType.Cosmo });
+            var response = testExecuter.ExecuteTest(dic, new[] { DataStoreType.InMemory,
+                                                                DataStoreType.Cosmo,
+                                                                DataStoreType.FileSystem,
+                                                                DataStoreType.AzureSql,
+                                                                DataStoreType.RedisCache });
 
             foreach (var dataStoreType in response.Keys)
             {
@@ -124,7 +128,7 @@ namespace ConsoleApp2
             return totalFetchTime;
         }
 
-        public static double FetchDataFromAzureDB(IDataStorebyPoint dataStorebypoint)
+        public static double FetchDataFromAzureDB(IQueryableDataStore dataStorebypoint)
         {
             double totalFetchTime = 0;
             for (var count = 1; count < 10; count++)

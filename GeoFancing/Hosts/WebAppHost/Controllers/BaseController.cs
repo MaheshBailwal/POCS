@@ -12,7 +12,7 @@ namespace RedisTest.Controllers
     {
         static bool loaded;
         IDataStore _dataStore;
-        IDataStorebyPoint _dataStorebyPoint;
+        IQueryableDataStore _dataStorebyPoint;
 
         protected string SearchCordinates(IDataStore dataStore)
         {            
@@ -47,7 +47,7 @@ namespace RedisTest.Controllers
             return Environment.NewLine + $"Total aggregate fetch time from {dataStore.GetType().Name} in milliseconds " + ((decimal)totalFetchTime / totalFetchSites);            
         }
 
-        protected string SearchCodrinatesfromDB(IDataStorebyPoint dataStorebypoint)
+        protected string SearchCodrinatesfromDB(IQueryableDataStore dataStorebypoint)
         {
             double totalFetchTime = 0;            
             for (var count = 1; count < 10; count++)

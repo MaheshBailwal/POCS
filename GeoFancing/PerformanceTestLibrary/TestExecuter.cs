@@ -25,18 +25,29 @@ namespace PerformanceTestLibrary
         public Dictionary<DataStoreType, Dictionary<MetricsType, double>> ExecuteTest(Dictionary<string, string> parameters,
                                                                           IEnumerable<DataStoreType> dataStoreTypes)
         {
-          
+
             var metrics = new Dictionary<DataStoreType, Dictionary<MetricsType, double>>();
 
             foreach (var dataStoreType in dataStoreTypes)
             {
                 switch (dataStoreType)
                 {
-                    case DataStoreType.FileSystem:
-                        IDataStore fileSystemDataStore = new FileSystemCache();
-                        metrics[DataStoreType.FileSystem] = RunTest(fileSystemDataStore);
+
+                    case DataStoreType.InMemory:
+                        metrics[DataStoreType.InMemory] = RunTest(new InMemoryCache());
                         break;
 
+
+                    case DataStoreType.RedisCache:
+                        metrics[DataStoreType.RedisCache] = RunTest(new RedisCache(new RedisConnector(parameters["RedisCacheConfig"])));
+                        break;
+
+                    case DataStoreType.AzureSql:
+                        metrics[DataStoreType.AzureSql] = RunTest(new AzureSql(new SiteDBLayer(parameters["AzureDBConnectionString"])));
+                        break;
+                    case DataStoreType.FileSystem:
+                        metrics[DataStoreType.FileSystem] = RunTest(new FileSystemCache());
+                        break;
                     case DataStoreType.Cosmo:
                         IDataStore cosmoDB = new CosmoDS(parameters["CosmoDatabaseName"],
                             parameters["CosmoCollectionName"],
@@ -74,12 +85,16 @@ namespace PerformanceTestLibrary
             return FetchDataFromDataStore(dataStore);
         }
 
+        private Dictionary<MetricsType, double> RunTest(IQueryableDataStore dataStore)
+        {
 
-        private  Dictionary<MetricsType, double> FetchDataFromDataStore(IDataStore dataStore)
+            return FetchDataFromQueryableDataStore(dataStore);
+        }
+
+        private Dictionary<MetricsType, double> FetchDataFromDataStore(IDataStore dataStore)
         {
             double totalFetchTime = 0;
             double totalOverallTime = 0;
-            int totalFetchSites = _numberOfIteration;
             var metrices = new Dictionary<MetricsType, double>();
 
             for (var count = 1; count < _numberOfIteration; count++)
@@ -95,12 +110,13 @@ namespace PerformanceTestLibrary
                 var y = (count * 1 * 10) + 55;
 
                 //check corodinates exist in rectangle
-                var zone = site.Zones.FirstOrDefault(z => z.Rectangle.Contains(x, y));
+                var zone = site.Zones.FindAll(z => z.Rectangle.Contains(x, y));
 
                 //if yes then then find whether corodiante exist in polygon
                 if (zone != null)
                 {
-                    var found = zone.PolyGon.FindPoint(x, y);
+                    //need add loop if need to check in all zones 
+                    var found = zone.FirstOrDefault().PolyGon.FindPoint(x, y);
                 }
 
                 stopwatch.Stop();
@@ -116,11 +132,16 @@ namespace PerformanceTestLibrary
             return metrices;
         }
 
-        private double FetchDataFromAzureDB(IDataStorebyPoint dataStorebypoint)
+        private Dictionary<MetricsType, double> FetchDataFromQueryableDataStore(IQueryableDataStore dataStorebypoint)
         {
             double totalFetchTime = 0;
-            for (var count = 1; count < 10; count++)
+            double totalOverallTime = 0;
+            int totalFetchSites = _numberOfIteration;
+            var metrices = new Dictionary<MetricsType, double>();
+
+            for (var count = 1; count < _numberOfIteration; count++)
             {
+
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 double fetchTime;
@@ -141,10 +162,18 @@ namespace PerformanceTestLibrary
                         Console.WriteLine("Inside the polygon");
                     }
                 }
+
+                stopwatch.Stop();
+                totalOverallTime += stopwatch.Elapsed.TotalMilliseconds;
             }
 
-            Console.WriteLine($"Total aggregate fetch time from {dataStorebypoint.GetType().Name} in milliseconds " + ((decimal)totalFetchTime / 10));
-            return totalFetchTime;
+
+            metrices[MetricsType.AvgDataFetchTime] = (double)(totalFetchTime / _numberOfIteration);
+
+            metrices[MetricsType.AvgTotalTime] = (double)(totalOverallTime / _numberOfIteration);
+
+            return metrices;
+
         }
     }
 }

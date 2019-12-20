@@ -6,7 +6,7 @@
         void Put<T>(string key, T instance);
     }
 
-    public interface IDataStorebyPoint
+    public interface IQueryableDataStore
     {
         T Get<T>(string key, int X, int Y, out double fetchTime);
         void Put<T>(string key, T instance);

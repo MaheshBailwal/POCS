@@ -8,6 +8,8 @@ namespace PerformanceTestLibrary
     {
         InMemory,
         FileSystem,
-        Cosmo
+        Cosmo,
+        AzureSql,
+        RedisCache,
     }
 }
