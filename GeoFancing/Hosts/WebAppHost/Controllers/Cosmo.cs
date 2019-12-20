@@ -9,7 +9,7 @@ namespace RedisTest.Controllers
     [Route("cosmo")]
     public class Cosmo : BaseController
     {
-        IDataStore _dataStore;
+        INonQueryableDataStore _dataStore;
 
         static bool loaded;        
 

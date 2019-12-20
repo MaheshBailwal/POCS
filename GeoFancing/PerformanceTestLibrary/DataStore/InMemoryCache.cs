@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace PerformanceTestLibrary
 {
-    public class InMemoryCache : IDataStore
+    public class InMemoryCache : INonQueryableDataStore
     {
         static Dictionary<string, object> _sites;
 

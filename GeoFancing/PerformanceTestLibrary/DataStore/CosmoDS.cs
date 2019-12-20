@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PerformanceTestLibrary
 {
-    public class CosmoDS : IDataStore
+    public class CosmoDS : INonQueryableDataStore
     {
         private readonly string _databaseName;
         private readonly string _collectionName;

@@ -10,7 +10,7 @@ namespace RedisTest.Controllers
     public class InMemory : BaseController
     {
         static bool loaded;
-        IDataStore _dataStore;
+        INonQueryableDataStore _dataStore;
 
         public InMemory(InMemoryCache inMemoryCache)
         {

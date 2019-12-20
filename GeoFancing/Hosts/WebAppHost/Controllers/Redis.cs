@@ -11,7 +11,7 @@ namespace RedisTest.Controllers
     {
 
         static bool loaded;
-        IDataStore _dataStore;
+        INonQueryableDataStore _dataStore;
 
         public Redis(RedisCache redis)
         {

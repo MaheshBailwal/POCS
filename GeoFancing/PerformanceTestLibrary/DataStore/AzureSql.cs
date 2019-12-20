@@ -24,7 +24,7 @@ namespace PerformanceTestLibrary
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var site = _SiteDBLayer.GetSites(Convert.ToInt32(key), X, Y);
+            var site = _SiteDBLayer.GetSites(Convert.ToInt32(key), X, Y).ToList();
             stopwatch.Stop();
 
             fetchTime = stopwatch.Elapsed.TotalMilliseconds;

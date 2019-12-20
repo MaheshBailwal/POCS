@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace PerformanceTestLibrary
 {
-    public class RedisCache : IDataStore
+    public class RedisCache : INonQueryableDataStore
     {        
         private readonly RedisConnector _redisConnector;
 

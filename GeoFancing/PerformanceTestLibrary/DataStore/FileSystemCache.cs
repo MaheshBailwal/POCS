@@ -5,7 +5,7 @@ using System.IO;
 
 namespace PerformanceTestLibrary
 {
-    public class FileSystemCache : IDataStore
+    public class FileSystemCache : INonQueryableDataStore
     {
         static string rootFolder = @"F:\SiteData";
 

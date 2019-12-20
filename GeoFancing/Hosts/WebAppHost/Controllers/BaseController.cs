@@ -11,10 +11,10 @@ namespace RedisTest.Controllers
     public class BaseController : Controller
     {
         static bool loaded;
-        IDataStore _dataStore;
+        INonQueryableDataStore _dataStore;
         IQueryableDataStore _dataStorebyPoint;
 
-        protected string SearchCordinates(IDataStore dataStore)
+        protected string SearchCordinates(INonQueryableDataStore dataStore)
         {            
             double totalFetchTime = 0;
             int totalFetchSites = 100;
@@ -77,7 +77,7 @@ namespace RedisTest.Controllers
             return Environment.NewLine + $"Total aggregate fetch time from {dataStorebypoint.GetType().Name} in milliseconds " + ((decimal)totalFetchTime / 10);
         }
 
-        protected void LoadData(IDataStore dataStore)
+        protected void LoadData(INonQueryableDataStore dataStore)
         {
             var sites = Util.CreateSites();
 

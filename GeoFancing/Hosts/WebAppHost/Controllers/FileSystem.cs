@@ -10,7 +10,7 @@ namespace RedisTest.Controllers
     public class FileSystem : BaseController
     {
         static bool loaded;
-        IDataStore _dataStore;
+        INonQueryableDataStore _dataStore;
 
         public FileSystem(FileSystemCache fileSystemCache)
         {

@@ -15,14 +15,14 @@ namespace PerformanceTestLibrary
             _connectionString = connectionString;
         }
 
-        public Site GetSites(int siteID, int X, int Y)
+        public IEnumerable<Zone> GetSites(int siteID, int X, int Y)
         {            
             int lX =0;
             int lY = 0;
             int lWidth = 0;
             int lHeight = 0;
             Site site = new Site();
-            site.Zones = new List<Zone>();
+            var zones  = new List<Zone>();
             using (SqlConnection con = new SqlConnection( _connectionString))
             {
                 string strSQL = "select SiteID,X,Y,Width, Height from [Site_Zone] where SiteID=" + siteID + " and (" + X + ">=X and " +
@@ -39,13 +39,13 @@ namespace PerformanceTestLibrary
                     lY = Convert.ToInt32(rdr["Y"]);
                     lWidth = Convert.ToInt32(rdr["Width"]);
                     lHeight = Convert.ToInt32(rdr["Height"]);
-                    site.Zones.Add(new Zone() { Rectangle = new System.Drawing.Rectangle() { X = lX, Y = lY, Width = lWidth, Height = lHeight }, PolyGon = null });
+                    zones.Add(new Zone() { Rectangle = new System.Drawing.Rectangle() { X = lX, Y = lY, Width = lWidth, Height = lHeight }, PolyGon = null });
                     
                     //lstSite.Add(site);
                 }
                 con.Close();
             }
-            return site;
+            return zones;
         }
 
     }
