@@ -60,7 +60,6 @@ namespace PerformanceTestLibrary
             try
             {
 
-
                 await documentClient.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, _site.SiteID.ToString()));
 
             }

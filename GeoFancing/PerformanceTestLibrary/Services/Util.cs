@@ -9,11 +9,8 @@ namespace PerformanceTestLibrary
 {
     public class Util
     {
-        public static Dictionary<int, Site> CreateSites()
+        public static Dictionary<int, Site> CreateSites(int sitesCount = 1000, int zonesCount = 100)
         {
-            int sitesCount = 1000;
-            int zonesCount = 100;
-
             Console.WriteLine($"Creating {sitesCount} sites with {zonesCount} in each");
             var siteCache = new Dictionary<int, Site>();
 

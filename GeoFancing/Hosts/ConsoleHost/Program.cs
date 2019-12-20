@@ -22,7 +22,8 @@ namespace ConsoleApp2
             string cosmoCollectionName = ConfigurationManager.AppSettings["CosmoCollectionName"];
             string cosmoEndpointUrl = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
             string cosmoPrimaryKey = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
-            string azureDBConnectionString = ConfigurationManager.AppSettings["AzureDBConnectionString"];            
+            string azureDBConnectionString = ConfigurationManager.AppSettings["AzureDBConnectionString"];
+
 
             // Create redis connector
             RedisConnector redisConnector = new RedisConnector(redisHost);
@@ -35,6 +36,41 @@ namespace ConsoleApp2
             IDataStorebyPoint azureDB = new AzureSql(azureDBLayer);
             IDataStore cosmoDB = new CosmoDS(cosmoDatabaseName, cosmoCollectionName, cosmoEndpointUrl, cosmoPrimaryKey);
 
+
+
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            dic["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
+            dic["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
+            dic["CosmoCollectionName"] = ConfigurationManager.AppSettings["CosmoCollectionName"];
+            dic["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
+            dic["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
+            dic["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
+
+
+            TestExecuter testExecuter = new TestExecuter(ProgressNotifiactionHandler, 10, 10, 5);
+
+
+            var response = testExecuter.ExecuteTest(dic, new[] { DataStoreType.FileSystem, DataStoreType.Cosmo });
+
+            foreach (var dataStoreType in response.Keys)
+            {
+                var metreics = response[dataStoreType];
+
+                Console.WriteLine($"Metrics for datastor {dataStoreType.ToString()}");
+
+                foreach (var metricsType in metreics.Keys)
+                {
+                    Console.WriteLine($" {metricsType.ToString()} : time in ms { metreics[metricsType]} ");
+                }
+            }
+
+
+            Console.WriteLine("Done");
+
+            Console.ReadLine();
+            return;
+
             Console.WriteLine("Putting sites in all data stores");
 
             foreach (var key in sites.Keys)
@@ -44,7 +80,7 @@ namespace ConsoleApp2
                 redisCache.Put(key.ToString(), sites[key]);
             }
 
-            
+
             FetchDataFromDataStore(fileSystemDataStore);
             FetchDataFromDataStore(inMemoryCache);
             FetchDataFromDataStore(redisCache);
@@ -53,12 +89,17 @@ namespace ConsoleApp2
             Console.ReadLine();
         }
 
+        static void ProgressNotifiactionHandler(string message)
+        {
+            Console.WriteLine(message);
+        }
+
         public static double FetchDataFromDataStore(IDataStore dataStore)
         {
             double totalFetchTime = 0;
             int totalFetchSites = 100;
             for (var count = 1; count < totalFetchSites; count++)
-            {                
+            {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -76,7 +117,7 @@ namespace ConsoleApp2
                 if (zone != null)
                 {
                     var found = zone.PolyGon.FindPoint(x, y);
-                }                
+                }
             }
 
             Console.WriteLine($"Total aggregate fetch time to serach from {dataStore.GetType().Name} in  milliseconds " + ((decimal)totalFetchTime / totalFetchSites));
