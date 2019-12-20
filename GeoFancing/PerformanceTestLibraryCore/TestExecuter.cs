@@ -122,33 +122,6 @@ namespace PerformanceTestLibrary
 
             return metrices;
         }
-
-        //private Dictionary<MetricsType, double> FetchDataFromQueryableDataStore(IQueryableDataStore dataStorebypoint)
-        //{
-        //    double totalFetchTime = 0;
-        //    double totalOverallTime = 0;
-        //    int totalFetchSites = _numberOfIteration;
-        //    var metrices = new Dictionary<MetricsType, double>();
-
-        //    for (var count = 1; count < _numberOfIteration; count++)
-        //    {
-        //        var stopwatch = new Stopwatch();
-        //        stopwatch.Start();
-        //        double fetchTime;
-        //        var x = (count * 1 * 10) + 100;
-        //        var y = (count * 1 * 10) + 55;
-        //        var zones = dataStorebypoint.Get<IEnumerable<Zone>>(count.ToString(), x, y, out fetchTime);
-        //        totalFetchTime += fetchTime;
-
-        //        stopwatch.Stop();
-        //        totalOverallTime += stopwatch.Elapsed.TotalMilliseconds;
-        //    }
-
-
-        //    metrices[MetricsType.AvgDataFetchTime] = (double)(totalFetchTime / _numberOfIteration);
-        //    metrices[MetricsType.AvgTotalTime] = (double)(totalOverallTime / _numberOfIteration);
-
-        //    return metrices;
-        //}
+      
     }
 }

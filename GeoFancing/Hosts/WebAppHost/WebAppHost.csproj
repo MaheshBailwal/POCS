@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PerformanceTestLibraryCore\PerformanceTestLibraryCore.csproj" />
+    <ProjectReference Include="..\..\PerformanceTestLibraryCore\PerformanceTestLibrary.csproj" />
   </ItemGroup>
 
 </Project>

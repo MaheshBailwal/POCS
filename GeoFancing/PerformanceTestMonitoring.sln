@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleHost", "Hosts\Consol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppHost", "Hosts\WebAppHost\WebAppHost.csproj", "{50083E3C-BD70-42B1-A9D8-9801D58F4888}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceTestLibraryCore", "PerformanceTestLibraryCore\PerformanceTestLibraryCore.csproj", "{CD8AC1B1-93B8-44FC-AC23-3185556113D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceTestLibrary", "PerformanceTestLibraryCore\PerformanceTestLibrary.csproj", "{CD8AC1B1-93B8-44FC-AC23-3185556113D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
