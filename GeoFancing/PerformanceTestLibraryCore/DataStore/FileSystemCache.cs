@@ -7,7 +7,7 @@ namespace PerformanceTestLibrary
 {
     public class FileSystemCache : INonQueryableDataStore
     {
-        static string rootFolder = @"F:\SiteData";
+        static string rootFolder = @"SiteData";
 
         public FileSystemCache()
         {

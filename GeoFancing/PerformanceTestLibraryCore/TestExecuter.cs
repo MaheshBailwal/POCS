@@ -85,6 +85,7 @@ namespace PerformanceTestLibrary
             bool isQueryableDataStore = dataStore is IQueryableDataStore;
             IEnumerable<Zone> zones = null;
 
+            _progressNotifiaction($"Fetching Data From :{dataStore}");
 
             for (var count = 1; count < _numberOfIteration; count++)
             {

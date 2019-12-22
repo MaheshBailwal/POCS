@@ -22,7 +22,10 @@ namespace ConsoleApp2
             parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
             parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
 
-            var testExecuter = new TestExecuter(ProgressNotifiactionHandler, 3, 3, 3);
+            var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
+               int.Parse( ConfigurationManager.AppSettings["NumberOfSites"]),
+                int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
+                int.Parse(ConfigurationManager.AppSettings["NumberOfIteration"]));
 
             var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
                                                                 DataStoreType.Cosmo,
