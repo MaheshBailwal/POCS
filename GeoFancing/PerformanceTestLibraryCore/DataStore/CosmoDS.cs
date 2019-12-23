@@ -35,14 +35,14 @@ namespace PerformanceTestLibrary
                        .Where(r => r.SiteID == Convert.ToInt32(key))
                        .AsEnumerable().FirstOrDefault().Zones.
                        Where(r => (r.Rectangle.X >= X && r.Rectangle.X <= X + width)
-                       && (r.Rectangle.Y >= Y && r.Rectangle.X <= Y + height));//.ToList();
-            Site site = new Site();
-            site.SiteID = Convert.ToInt32(key);
-            site.Zones = zones.ToList();
+                       && (r.Rectangle.Y >= Y && r.Rectangle.X <= Y + height)).ToList();
+            //Site site = new Site();
+            //site.SiteID = Convert.ToInt32(key);
+            //site.Zones = zones.ToList();
 
             stopwatch.Stop();
             fetchTime = stopwatch.Elapsed.TotalMilliseconds;            
-            return (T)Convert.ChangeType(site, typeof(T));
+            return (T)Convert.ChangeType(zones, typeof(T));
         }
 
         public void Put<T>(string key, T instance)

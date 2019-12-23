@@ -15,13 +15,13 @@ namespace PerformanceTestLibrary
             _connectionString = connectionString;
         }
 
-        public Site GetSites(int siteID, int X, int Y)
+        public IEnumerable<Zone> GetZones(int siteID, int X, int Y)
         {            
             int lX =0;
             int lY = 0;
             int lWidth = 0;
             int lHeight = 0;
-            Site site = new Site();
+            //Site site = new Site();
             var zones  = new List<Zone>();
             using (SqlConnection con = new SqlConnection( _connectionString))
             {
@@ -34,7 +34,7 @@ namespace PerformanceTestLibrary
                 //site = new Site();
                 while (rdr.Read())
                 {                    
-                    site.SiteID = Convert.ToInt32(rdr["SiteID"]);                    
+                    //site.SiteID = Convert.ToInt32(rdr["SiteID"]);                    
                     lX= Convert.ToInt32(rdr["X"]);
                     lY = Convert.ToInt32(rdr["Y"]);
                     lWidth = Convert.ToInt32(rdr["Width"]);
@@ -45,7 +45,7 @@ namespace PerformanceTestLibrary
                 }
                 con.Close();
             }
-            return site;
+            return zones;
         }
 
     }

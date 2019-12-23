@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -57,13 +58,13 @@ namespace RedisTest.Controllers
                 double fetchTime;
                 var x = (count * 1 * 10) + 100;
                 var y = (count * 1 * 10) + 55;
-                var site = dataStorebypoint.Get<Site>(count.ToString(),x,y,100,100, out fetchTime);
+                var site = dataStorebypoint.Get<List<Zone>>(count.ToString(),x,y,100,100, out fetchTime);
                 totalFetchTime += fetchTime;
 
                 //check corodinates exist in rectangle
                 Zone zone=new Zone();
-                if (site.Zones!= null && site.Zones.Count>0)
-                zone = site.Zones.FirstOrDefault();
+                if (site != null && site.Count>0)
+                zone = site.FirstOrDefault();
 
                 //if yes then then find whether corodiante exist in polygon
                 if (zone != null && zone.PolyGon != null)
