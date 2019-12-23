@@ -20,7 +20,7 @@ namespace PerformanceTestLibrary
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var site = _SiteDBLayer.GetSites(Convert.ToInt32(key), X, Y).ToList();
+            var site = _SiteDBLayer.GetSites(Convert.ToInt32(key), X, Y);//.ToList();
             
             stopwatch.Stop();
 
