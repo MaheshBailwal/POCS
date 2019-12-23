@@ -31,11 +31,15 @@ namespace PerformanceTestLibrary
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var site = documentClient.CreateDocumentQuery<Site>(UriFactory.CreateDocumentCollectionUri(_databaseName, _collectionName))
+            var zones = documentClient.CreateDocumentQuery<Site>(UriFactory.CreateDocumentCollectionUri(_databaseName, _collectionName))
                        .Where(r => r.SiteID == Convert.ToInt32(key))
                        .AsEnumerable().FirstOrDefault().Zones.
-                       Where(r => (r.Rectangle.X >= X && r.Rectangle.X <= X+width) 
-                       && (r.Rectangle.Y >= Y && r.Rectangle.X <=Y+height)).ToList();
+                       Where(r => (r.Rectangle.X >= X && r.Rectangle.X <= X + width)
+                       && (r.Rectangle.Y >= Y && r.Rectangle.X <= Y + height));//.ToList();
+            Site site = new Site();
+            site.SiteID = Convert.ToInt32(key);
+            site.Zones = zones.ToList();
+
             stopwatch.Stop();
             fetchTime = stopwatch.Elapsed.TotalMilliseconds;            
             return (T)Convert.ChangeType(site, typeof(T));

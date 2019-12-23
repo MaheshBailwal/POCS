@@ -61,7 +61,9 @@ namespace RedisTest.Controllers
                 totalFetchTime += fetchTime;
 
                 //check corodinates exist in rectangle
-                var zone = site.Zones.FirstOrDefault();
+                Zone zone=new Zone();
+                if (site.Zones!= null && site.Zones.Count>0)
+                zone = site.Zones.FirstOrDefault();
 
                 //if yes then then find whether corodiante exist in polygon
                 if (zone != null && zone.PolyGon != null)

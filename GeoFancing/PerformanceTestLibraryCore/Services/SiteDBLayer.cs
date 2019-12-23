@@ -15,7 +15,7 @@ namespace PerformanceTestLibrary
             _connectionString = connectionString;
         }
 
-        public IEnumerable<Zone> GetSites(int siteID, int X, int Y)
+        public Site GetSites(int siteID, int X, int Y)
         {            
             int lX =0;
             int lY = 0;
@@ -45,7 +45,7 @@ namespace PerformanceTestLibrary
                 }
                 con.Close();
             }
-            return zones;
+            return site;
         }
 
     }
