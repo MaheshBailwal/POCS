@@ -1,4 +1,5 @@
 ﻿using PerformanceTestLibrary;
+using PerformanceTestLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,30 +15,38 @@ namespace ConsoleApp2
     {
         static void Main(string[] args)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
-            parameters["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
-            parameters["CosmoCollectionName"] = ConfigurationManager.AppSettings["CosmoCollectionName"];
-            parameters["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
-            parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
-            parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
-            parameters["StorageConnectionstring"] = ConfigurationManager.AppSettings["StorageConnectionstring"];
-            parameters["ContainerName"] = ConfigurationManager.AppSettings["ContainerName"];
-            
-            var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
-               int.Parse( ConfigurationManager.AppSettings["NumberOfSites"]),
-                int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
-                int.Parse(ConfigurationManager.AppSettings["NumberOfIteration"]));
+            try
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
+                parameters["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
+                parameters["CosmoCollectionName"] = ConfigurationManager.AppSettings["CosmoCollectionName"];
+                parameters["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
+                parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
+                parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
 
-            var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
+                var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
+                   int.Parse(ConfigurationManager.AppSettings["NumberOfSites"]),
+                    int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
+                    int.Parse(ConfigurationManager.AppSettings["NumberOfIteration"]));
+
+                var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
                                                                 DataStoreType.Cosmo,
                                                                 DataStoreType.FileSystem,
                                                                 DataStoreType.AzureSql,
                                                                 DataStoreType.RedisCache,
             DataStoreType.BlobStorage});
 
-            PrintResult(response);
-            Console.WriteLine("Done");
+                Email email = new Email();
+                email.SendEmailWithMetricsAsync(response);
+                PrintResult(response);
+                Console.WriteLine("Done");
+
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
             Console.ReadLine();
         }
 
