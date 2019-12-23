@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,13 +61,10 @@ namespace PerformanceTestLibrary.Services
                 var metreics = response[dataStoreType];
 
                 sb.Append($"<tr><td>{dataStoreType.ToString()}</td>");
-
-                Console.WriteLine($"{Environment.NewLine}Metrics for datastor {dataStoreType.ToString()}");
-
+         
                 foreach (var metricsType in metreics.Keys)
                 {
                     sb.Append($"<td>{metreics[metricsType]}</td>");
-                    Console.WriteLine($" {metricsType.ToString()} : time in ms { metreics[metricsType]} ");
                 }
                 sb.Append($"</tr>");
             }
@@ -77,9 +75,13 @@ namespace PerformanceTestLibrary.Services
             {
                 Body = sb.ToString(),
                 ToEmails = new[] { "mahesh.bailwal@rsystems.com" },
-                Subject = "gggggg"
+                Subject = "Result"
             };
 
+            Console.WriteLine("WRITE fILE");
+
+            File.WriteAllText("Result.html", sb.ToString());
+            Console.WriteLine("WRITE fILE end ");
             SendEmailAsync(emailRequest).Wait();
         }
     }

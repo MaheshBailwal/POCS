@@ -15,43 +15,39 @@ namespace ConsoleApp2
     {
         static void Main(string[] args)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
-            parameters["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
-            parameters["CosmoCollectionName"] = ConfigurationManager.AppSettings["CosmoCollectionName"];
-            parameters["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
-            parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
-            parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
+            try
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
+                parameters["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
+                parameters["CosmoCollectionName"] = ConfigurationManager.AppSettings["CosmoCollectionName"];
+                parameters["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
+                parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
+                parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
 
-            var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
-               int.Parse( ConfigurationManager.AppSettings["NumberOfSites"]),
-                int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
-                int.Parse(ConfigurationManager.AppSettings["NumberOfIteration"]));
+                var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
+                   int.Parse(ConfigurationManager.AppSettings["NumberOfSites"]),
+                    int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
+                    int.Parse(ConfigurationManager.AppSettings["NumberOfIteration"]));
 
-            var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
+                var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
                                                                 DataStoreType.Cosmo,
                                                                 DataStoreType.FileSystem,
                                                                 DataStoreType.AzureSql,
-                                                                DataStoreType.RedisCache });
+                                                                DataStoreType.RedisCache
+            });
 
-            Email email = new Email();
-            email.SendEmailWithMetricsAsync(response);
-            PrintResult(response);
-            Console.WriteLine("Done");
-            Console.ReadLine();
-        }
+                Email email = new Email();
+                email.SendEmailWithMetricsAsync(response);
+                PrintResult(response);
+                Console.WriteLine("Done");
 
-        static void Main123(string[] args)
-        {
-            Email email = new Email();
-            EmailRequest emailRequest = new EmailRequest()
+            }
+            catch (Exception ex)
             {
-                 Body = "Test Body",
-                 ToEmails = new[] { "mahesh.bailwal@rsystems.com" },
-                  Subject = "gggggg"
-            };
-
-            email.SendEmailAsync(emailRequest).Wait();
+                Console.Write(ex);
+            }
+            Console.ReadLine();
         }
 
         static void ProgressNotifiactionHandler(string message)
