@@ -1,4 +1,5 @@
 ﻿using PerformanceTestLibrary;
+using PerformanceTestLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -33,9 +34,24 @@ namespace ConsoleApp2
                                                                 DataStoreType.AzureSql,
                                                                 DataStoreType.RedisCache });
 
+            Email email = new Email();
+            email.SendEmailWithMetricsAsync(response);
             PrintResult(response);
             Console.WriteLine("Done");
             Console.ReadLine();
+        }
+
+        static void Main123(string[] args)
+        {
+            Email email = new Email();
+            EmailRequest emailRequest = new EmailRequest()
+            {
+                 Body = "Test Body",
+                 ToEmails = new[] { "mahesh.bailwal@rsystems.com" },
+                  Subject = "gggggg"
+            };
+
+            email.SendEmailAsync(emailRequest).Wait();
         }
 
         static void ProgressNotifiactionHandler(string message)
