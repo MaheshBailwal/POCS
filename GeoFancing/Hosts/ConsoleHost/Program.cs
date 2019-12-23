@@ -21,7 +21,9 @@ namespace ConsoleApp2
             parameters["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
             parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
             parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
-
+            parameters["StorageConnectionstring"] = ConfigurationManager.AppSettings["StorageConnectionstring"];
+            parameters["ContainerName"] = ConfigurationManager.AppSettings["ContainerName"];
+            
             var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
                int.Parse( ConfigurationManager.AppSettings["NumberOfSites"]),
                 int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
@@ -31,7 +33,8 @@ namespace ConsoleApp2
                                                                 DataStoreType.Cosmo,
                                                                 DataStoreType.FileSystem,
                                                                 DataStoreType.AzureSql,
-                                                                DataStoreType.RedisCache });
+                                                                DataStoreType.RedisCache,
+            DataStoreType.BlobStorage});
 
             PrintResult(response);
             Console.WriteLine("Done");

@@ -11,5 +11,6 @@ namespace PerformanceTestLibrary
         Cosmo,
         AzureSql,
         RedisCache,
+        BlobStorage
     }
 }

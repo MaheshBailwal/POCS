@@ -13,6 +13,8 @@ namespace RedisTest
         public string CosmoEndpointUrl { get; set; }
         public string CosmoPrimaryKey { get; set; }
         public string AzureDBConnectionString { get; set; }
+        public string StorageConnectionstring { get; set; }
+        public string ContainerName { get; set; }
 
     }
 }

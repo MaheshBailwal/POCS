@@ -54,7 +54,7 @@ namespace RedisTest
             services.AddSingleton<SiteDBLayer>(x => new SiteDBLayer(appSettings.AzureDBConnectionString));
             services.AddSingleton<AzureSql, AzureSql>();
             services.AddSingleton<AppSettings>(appSettings);
-
+            services.AddSingleton<BlobDS>(x => new BlobDS(appSettings.ContainerName, appSettings.StorageConnectionstring));
 
         }
 

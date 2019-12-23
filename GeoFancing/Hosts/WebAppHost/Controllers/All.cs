@@ -34,6 +34,8 @@ namespace RedisTest.Controllers
             parameters["CosmoEndpointUrl"] = _appSettings.CosmoEndpointUrl;
             parameters["CosmoPrimaryKey"] = _appSettings.CosmoPrimaryKey;
             parameters["AzureDBConnectionString"] = _appSettings.AzureDBConnectionString;
+            parameters["StorageConnectionstring"] = _appSettings.StorageConnectionstring;
+            parameters["ContainerName"] = _appSettings.ContainerName;
 
             var testExecuter = new TestExecuter(ProgressNotifiactionHandler, 3, 3, 3);
 
