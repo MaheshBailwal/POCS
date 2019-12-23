@@ -34,21 +34,21 @@ namespace PerformanceTestLibrary
                         metrics[DataStoreType.InMemory] = RunTest(new InMemoryCache());
                         break;
                     case DataStoreType.RedisCache:
-                        //metrics[DataStoreType.RedisCache] = RunTest(new RedisCache(new RedisConnector(parameters["RedisCacheConfig"])));
+                        metrics[DataStoreType.RedisCache] = RunTest(new RedisCache(new RedisConnector(parameters["RedisCacheConfig"])));
                         break;
                     case DataStoreType.AzureSql:
-                        //metrics[DataStoreType.AzureSql] = RunTest(new AzureSql(new SiteDBLayer(parameters["AzureDBConnectionString"])));
+                        metrics[DataStoreType.AzureSql] = RunTest(new AzureSql(new SiteDBLayer(parameters["AzureDBConnectionString"])));
                         break;
                     case DataStoreType.FileSystem:
                         metrics[DataStoreType.FileSystem] = RunTest(new FileSystemCache());
                         break;
                     case DataStoreType.Cosmo:
-                        //IQueryableDataStore cosmoDB = new CosmoDS(parameters["CosmoDatabaseName"],
-                        //    parameters["CosmoCollectionName"],
-                        //    parameters["CosmoEndpointUrl"],
-                        //    parameters["CosmoPrimaryKey"]);
+                        IQueryableDataStore cosmoDB = new CosmoDS(parameters["CosmoDatabaseName"],
+                            parameters["CosmoCollectionName"],
+                            parameters["CosmoEndpointUrl"],
+                            parameters["CosmoPrimaryKey"]);
 
-                        //metrics[DataStoreType.Cosmo] = RunTest(cosmoDB);
+                        metrics[DataStoreType.Cosmo] = RunTest(cosmoDB);
                         break;
                     case DataStoreType.BlobStorage:
                         metrics[DataStoreType.BlobStorage] = RunTest(new BlobDS(parameters["ContainerName"], parameters["StorageConnectionstring"]));

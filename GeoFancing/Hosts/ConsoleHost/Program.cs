@@ -24,6 +24,8 @@ namespace ConsoleApp2
                 parameters["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
                 parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
                 parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
+                parameters["ContainerName"] = ConfigurationManager.AppSettings["ContainerName"];
+                parameters["StorageConnectionstring"] = ConfigurationManager.AppSettings["StorageConnectionstring"];
 
                 var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
                    int.Parse(ConfigurationManager.AppSettings["NumberOfSites"]),
