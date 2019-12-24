@@ -51,8 +51,7 @@ namespace RedisTest
             services.AddSingleton<FileSystemCache, FileSystemCache>();
             services.AddSingleton<InMemoryCache, InMemoryCache>();
             services.AddSingleton<CosmoDS>(x => new CosmoDS(appSettings.CosmoDatabaseName, appSettings.CosmoCollectionName, appSettings.CosmoEndpointUrl, appSettings.CosmoPrimaryKey));
-            services.AddSingleton<SiteDBLayer>(x => new SiteDBLayer(appSettings.AzureDBConnectionString));
-            services.AddSingleton<AzureSql, AzureSql>();
+            services.AddSingleton<AzureSql>(new AzureSql(appSettings.AzureDBConnectionString));
             services.AddSingleton<AppSettings>(appSettings);
             services.AddSingleton<BlobDS>(x => new BlobDS(appSettings.ContainerName, appSettings.StorageConnectionstring));
 
