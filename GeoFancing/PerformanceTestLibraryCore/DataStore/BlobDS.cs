@@ -38,7 +38,6 @@ namespace PerformanceTestLibrary
         public void Put<T>(string key, T instance)
         {
             var json = JsonConvert.SerializeObject(instance);
-            //File.WriteAllText(Path.Combine("", key + ".json"), json);
             byte[] byteArray = Encoding.UTF8.GetBytes(json);
             string fileName = String.Format("{0}/{1}.json", "Site", "Site" + key);
             UploadFileToBlob(fileName, byteArray, "");

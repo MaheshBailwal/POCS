@@ -35,7 +35,7 @@ namespace PerformanceTestLibrary
                        .Where(r => r.SiteID == Convert.ToInt32(key))
                        .AsEnumerable().FirstOrDefault().Zones.
                        Where(r => (r.Rectangle.X >= X && r.Rectangle.X <= X + width)
-                       && (r.Rectangle.Y >= Y && r.Rectangle.X <= Y + height)).ToList();
+                       && (r.Rectangle.Y >= Y && r.Rectangle.Y <= Y + height)).ToList();
             //Site site = new Site();
             //site.SiteID = Convert.ToInt32(key);
             //site.Zones = zones.ToList();
