@@ -21,7 +21,7 @@ namespace PerformanceTestLibrary.Services
                 // Timeout = _amazonOptions.TimeOut,
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new System.Net.NetworkCredential("contionusintegration@gmail.com", "1234test!")
+                Credentials = new System.Net.NetworkCredential("contionusintegration@gmail.com", "ewimvlcyydqymzuc")
             };
 
             var message = new MailMessage()
