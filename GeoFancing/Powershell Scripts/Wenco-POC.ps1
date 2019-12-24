@@ -1,14 +1,33 @@
-﻿$resourceName = "rg-wenco-poc"
+﻿$resourceName = "rg-wenco"
 $redisCacheName = "wenco-redis-db"
-$webAppName = "wenco-webapp"
 $locationName = "East US"
+
 $AppServicePlan="DemoWebApps"
+$webAppName = "wenco-webapp"
 
-$redisTemplateLocation = "F:\AzureTemplates\RedisScriptAndJson\redistemplate.json"
-$publishPackage = "F:\AzureTemplates\WebApp\PublishProject\runtimes.zip"
-$filePath = "F:\AzureTemplates\WebApp\PublishProject\appsettings.json"
-$source = "F:\AzureTemplates\WebApp\PublishProject\*"
+$cosmosAccountName = "wenco-cosmo-testdb"
+$cosmosDatabaseName = "wenco-cosmoDB"
+$cosmosContainerName = "wenco-cosmoDB-container"
+$cosmosPartionKey = "Site"
 
+$sqlServerName = "wenco-server"
+$sqlUserName = "wencosqlserver"
+$sqlPassword = "Wenco#12345"
+$sqlDatabaseName = "wencodb"
+$sqlServerFirewallRule = "wencoFirewallRule"
+$sqlqueryFilePath = "F:\AzureTemplates\SqlQuery.sql"
+
+$appSettingFilePath = "F:\AzureTemplates\WebApp\PublishProject\appsettings.json"
+$webAppSource = "F:\AzureTemplates\WebApp\PublishProject\*"
+$webAppDestination = "F:\AzureTemplates\WebApp\PublishProject\runtimes.zip"
+
+# Check the current azure session
+$azContext = Get-AzContext
+#echo $content
+if (-not $azContext) 
+{
+	Login-AzAccount
+}
 
 Write-Host "Checking Resource Group existence"
 $resourceGroup = Get-AzResourceGroup -Name $resourceName -ErrorAction SilentlyContinue
@@ -18,49 +37,23 @@ if([string]::IsNullOrEmpty($resourceGroup.ResourceGroupName))
     New-AzResourceGroup -Name $resourceName -Location $locationName
 }
 
-Write-Host "Checking Redis cache existence"
-$redisCache = Get-AzRedisCache -ResourceGroupName $resourceName -Name $redisCacheName -ErrorAction SilentlyContinue
-if([string]::IsNullOrEmpty($redisCache.Name))
-{
-    Write-Host "Creating Redis cache."
-    New-AzResourceGroupDeployment -ResourceGroupName $resourceName -TemplateFile $redisTemplateLocation
-    $redisCache = Get-AzRedisCache -ResourceGroupName $resourceName -Name $redisCacheName -ErrorAction SilentlyContinue
+Write-Host "Build Redis Cache"
+& "F:\AzureTemplates\RedisCache.ps1" -resourceName $resourceName -redisCacheName $redisCacheName -locationName $locationName
 
-    Write-Host "Update Redis Connection string into appSettings.json file"
-    $redisCacheKey = Get-AzRedisCacheKey -Name $redisCacheName -ResourceGroupName $resourceName
-    $redisConnectionstring = "wenco-redis-db.redis.cache.windows.net:6380,password=" + $redisCacheKey.PrimaryKey +",ssl=True,abortConnect=False"
-    $file = ([System.IO.File]::ReadAllText($filePath)  | ConvertFrom-Json)
-    $file.AppSettings.RedisCacheConfig = $redisConnectionstring
-    $file | ConvertTo-Json | Out-File -FilePath $filePath -Encoding utf8 -Force    
-}
+Write-Host "Build CosmoDb Server"
+& "F:\AzureTemplates\CosmoDB.ps1" -resourceName $resourceName -locationName $locationName -accountName $cosmosAccountName -databaseName $cosmosDatabaseName -containerName $cosmosContainerName -partitionkey $cosmosPartionKey
 
-Write-Host "Comressing file into zip file"
-Compress-Archive -Path $source -Update -DestinationPath $destination
-    
-Write-Host "Checking App service plan existence"
-$appServicePlan = Get-AzAppServicePlan -Name $AppServicePlan -ResourceGroupName $resourceName -ErrorAction SilentlyContinue
-if([string]::IsNullOrEmpty($AppServicePlan.Length))
-{
-    Write-Host "Creating App Service plan."
-    New-AzAppServicePlan -Name $AppServicePlan -Location $location -ResourceGroupName $resourceName -Tier Free
-    $appServicePlan = Get-AzAppServicePlan -Name $AppServicePlan -ResourceGroupName $resourceName -ErrorAction SilentlyContinue
-}
+Write-Host "Build SQL Azure Database"
+& "F:\AzureTemplates\SQLAzure.ps1" -resourceName $resourceName -locationName $locationName -sqlServerName $sqlServerName -sqlUserName $sqlUserName -sqlPassword $sqlPassword -sqlDatabaseName $sqlDatabaseName -sqlServerFirewallRule $sqlServerFirewallRule -queryFilePath $sqlqueryFilePath
 
-Write-Host "Checking web app existence"
-$webApp = Get-AzWebApp -ResourceGroupName $resourceName -Name $webAppName
-if([string]::IsNullOrEmpty($webApp))
-{
-    Write-Host "Creating web app."
-    New-AzWebApp -Name $webAppName -Location $location -AppServicePlan $AppServicePlan -ResourceGroupName $resourceName 
-    $webApp = Get-AzWebApp -ResourceGroupName $resourceName -Name $webAppName
-}
+Write-Host "Update App.Settings.Json File"
+& "F:\AzureTemplates\UpdateAppSettingsJson.ps1" -resourceName $resourceName -locationName $locationName -filePath $appSettingFilePath -redisCacheName $redisCacheName -cosmoAccountName $cosmosAccountName -cosmoDatabaseName $cosmosDatabaseName -cosmoContainerName $cosmosContainerName -sqlServerName $sqlServerName -sqlDatabaseName $sqlDatabaseName -sqlUserName $sqlUserName -sqlPassword $sqlPassword
 
-#Publish web app
-Write-Host "publishing package on the web app"
-Publish-AzWebapp -ResourceGroupName $resourceName -Name $webAppName -ArchivePath $destination
+Write-Host "Building Web App"
+& "F:\AzureTemplates\WebApp.ps1" -resourceName $resourceName -locationName $locationName -AppServicePlan $AppServicePlan -webAppName $webAppName -source $webAppSource -destination $webAppDestination
 
 #open web app
-start ‘https://wenco-webapp.azurewebsites.net/redis’
+start ‘https://wenco-webapp.azurewebsites.net/cosmo’
 
 #Ask to delete the complete the resoucre group
 $confirmToDelete = Read-Host -Prompt "Please confirm (Y/N) to delete all the resources" 

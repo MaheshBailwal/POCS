@@ -76,6 +76,14 @@ namespace PerformanceTestLibrary
 
         private Dictionary<MetricsType, double> RunTest(IQueryableDataStore dataStore)
         {
+            var count = 0;
+
+            foreach (var key in _sites.Keys)
+            {
+                _progressNotifiaction($"Storing progress count {++count}");
+                dataStore.Put(key.ToString(), _sites[key]);
+            }
+
             return FetchDataFromDataStore(dataStore);
         }
 
