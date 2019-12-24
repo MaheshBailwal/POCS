@@ -37,7 +37,7 @@ namespace PerformanceTestLibrary
                         metrics[DataStoreType.RedisCache] = RunTest(new RedisCache(new RedisConnector(parameters["RedisCacheConfig"])));
                         break;
                     case DataStoreType.AzureSql:
-                        metrics[DataStoreType.AzureSql] = RunTest(new AzureSql(new SiteDBLayer(parameters["AzureDBConnectionString"])));
+                        metrics[DataStoreType.AzureSql] = RunTest(new AzureSql(parameters["AzureDBConnectionString"]));
                         break;
                     case DataStoreType.FileSystem:
                         metrics[DataStoreType.FileSystem] = RunTest(new FileSystemCache());
