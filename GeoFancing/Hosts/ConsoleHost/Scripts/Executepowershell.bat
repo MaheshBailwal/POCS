@@ -1,0 +1,1 @@
+echo 'This will be writted at runtime.'
