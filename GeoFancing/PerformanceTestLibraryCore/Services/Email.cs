@@ -44,7 +44,7 @@ namespace PerformanceTestLibrary.Services
             message.Dispose();
         }
 
-        public void SendEmailWithMetricsAsync(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response)
+        public string SendEmailWithMetricsAsync(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -81,8 +81,13 @@ namespace PerformanceTestLibrary.Services
             Console.WriteLine("WRITE fILE");
 
             File.WriteAllText("Result.html", sb.ToString());
+            
             Console.WriteLine("WRITE fILE end ");
+
+          
             SendEmailAsync(emailRequest).Wait();
+
+            return sb.ToString();
         }
     }
 

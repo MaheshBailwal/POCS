@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PerformanceTestLibrary;
+using PerformanceTestLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,15 +10,15 @@ namespace RedisTest.Controllers
 {
     [Route("all")]
     public class RunAll : BaseController
-    {        
+    {
         private readonly FileSystemCache _fileSystemCache;
         private readonly InMemoryCache _inMemoryCache;
         private readonly RedisCache _redis;
         private readonly AzureSql _azureDB;
         private readonly CosmoDS _cosmoDb;
-        static bool loaded;
+        static bool running;
         AppSettings _appSettings;
-        StringBuilder sb = new StringBuilder();
+        static StringBuilder sb = new StringBuilder();
 
         public RunAll(AppSettings appSettings)
         {
@@ -27,31 +28,73 @@ namespace RedisTest.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters["RedisCacheConfig"] = _appSettings.RedisCacheConfig;
-            parameters["CosmoDatabaseName"] = _appSettings.CosmoDatabaseName;
-            parameters["CosmoCollectionName"] = _appSettings.CosmoCollectionName;
-            parameters["CosmoEndpointUrl"] = _appSettings.CosmoEndpointUrl;
-            parameters["CosmoPrimaryKey"] = _appSettings.CosmoPrimaryKey;
-            parameters["AzureDBConnectionString"] = _appSettings.AzureDBConnectionString;
-            parameters["StorageConnectionstring"] = _appSettings.StorageConnectionstring;
-            parameters["ContainerName"] = _appSettings.ContainerName;
+            if (sb.Length < 1)
+            {
+                running = true;
+                sb.AppendLine("Strated");
+                Task.Run(() => StartTest());
+            }
 
-            var testExecuter = new TestExecuter(ProgressNotifiactionHandler, 3, 3, 3);
+            if (running)
+            {
+                return Ok(sb.ToString());
+            }
 
-            var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
+            return Content(sb.ToString(), "text/html", Encoding.UTF8);
+
+        }
+
+        [HttpGet("clear")]
+        public async Task<IActionResult> Clear()
+        {
+            sb.Clear();
+            return Ok("cleared");
+        }
+
+        private void StartTest()
+        {
+            try
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters["RedisCacheConfig"] = _appSettings.RedisCacheConfig;
+                parameters["CosmoDatabaseName"] = _appSettings.CosmoDatabaseName;
+                parameters["CosmoCollectionName"] = _appSettings.CosmoCollectionName;
+                parameters["CosmoEndpointUrl"] = _appSettings.CosmoEndpointUrl;
+                parameters["CosmoPrimaryKey"] = _appSettings.CosmoPrimaryKey;
+                parameters["AzureDBConnectionString"] = _appSettings.AzureDBConnectionString;
+                parameters["StorageConnectionstring"] = _appSettings.StorageConnectionstring;
+                parameters["ContainerName"] = _appSettings.ContainerName;
+
+                var testExecuter = new TestExecuter(ProgressNotifiactionHandler, 3, 3, 3);
+
+                var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
                                                                 DataStoreType.Cosmo,
                                                                 DataStoreType.FileSystem,
                                                                 DataStoreType.AzureSql,
                                                                 DataStoreType.RedisCache });
 
-            PrintResult(response);
-            return Ok(sb.ToString());
+                Email email = new Email();
+                var html = email.SendEmailWithMetricsAsync(response);
+                sb.Clear();
+                sb.Append(html);
+            }
+            catch (Exception ex)
+            {
+                sb.Append(ex);
+            }
+            finally
+            {
+                running = false;
+            }
+
+
+            //  PrintResult(response);
+
         }
 
         private void ProgressNotifiactionHandler(string message)
         {
-          sb.AppendLine(message);
+            sb.AppendLine(message);
         }
         private void PrintResult(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response)
         {
