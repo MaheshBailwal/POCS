@@ -86,8 +86,6 @@ else
     Import-Module Az.Sql -Force
 }
 
-if(-not $database)
-{
+
 Write-Host "Invoking sql query on the server"
 Invoke-Sqlcmd -ServerInstance $server.FullyQualifiedDomainName -Database $database.DatabaseName -Username $sqlUserName -Password $sqlPassword -InputFile $queryFilePath
-}

@@ -61,7 +61,7 @@ Write-Host "Building Web App"
 & "$powerShellFolder\WebApp.ps1" -resourceName $resourceName -locationName $locationName -AppServicePlan $AppServicePlan -webAppName $webAppName -source $webAppSource -destination $webAppDestination
 
 #open web app
-start "https://$webAppName.azurewebsites.net/cosmo"
+start "https://$webAppName.azurewebsites.net/all"
 
 #Ask to delete the complete the resoucre group
 $confirmToDelete = Read-Host -Prompt "Please confirm (Y/N) to delete all the resources" 
