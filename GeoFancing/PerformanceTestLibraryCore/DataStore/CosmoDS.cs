@@ -25,6 +25,8 @@ namespace PerformanceTestLibrary
             _endPointUrl = endPointUrl;
             _primaryKey = primaryKey;
             documentClient = new DocumentClient(new Uri(_endPointUrl), _primaryKey);
+            documentClient.CreateDatabaseIfNotExistsAsync(new Database { Id = _databaseName }).Wait();
+            documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(_databaseName), new DocumentCollection { Id = _collectionName }).Wait();
         }
 
         public T Get<T>(string key, int X, int Y, int width, int height, out double fetchTime)
@@ -38,9 +40,6 @@ namespace PerformanceTestLibrary
                        .AsEnumerable().FirstOrDefault().Zones.
                        Where(r => (r.Rectangle.X >= X && r.Rectangle.X <= X + width)
                        && (r.Rectangle.Y >= Y && r.Rectangle.Y <= Y + height)).ToList();
-            //Site site = new Site();
-            //site.SiteID = Convert.ToInt32(key);
-            //site.Zones = zones.ToList();
 
             stopwatch.Stop();
             fetchTime = stopwatch.Elapsed.TotalMilliseconds;
@@ -55,33 +54,13 @@ namespace PerformanceTestLibrary
 
         public async Task PutAsync<T>(string key, T instance)
         {
-            string site = JsonConvert.SerializeObject(instance);
-            await documentClient.CreateDatabaseIfNotExistsAsync(new Database { Id = _databaseName });
-            await documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(_databaseName), new DocumentCollection { Id = _collectionName });
-            await CreateSiteDocumentIfNotExists(_databaseName, _collectionName, site);
+            await CreateSiteDocumentIfNotExists(_databaseName, _collectionName, instance);
         }
 
-        private async Task CreateSiteDocumentIfNotExists(string databaseName, string collectionName, string lsite)
+        private async Task CreateSiteDocumentIfNotExists(string databaseName, string collectionName, object site)
         {
-            Site _site = JsonConvert.DeserializeObject<Site>(lsite);
-            try
-            {
-
-                await documentClient.ReadDocumentAsync(UriFactory.CreateDocumentUri(databaseName, collectionName, _site.SiteID.ToString()));
-
-            }
-            catch (DocumentClientException de)
-            {
-                if (de.StatusCode == HttpStatusCode.NotFound)
-                {
-                    await documentClient.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), _site);
-
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await documentClient.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), site);
         }
     }
 }
+

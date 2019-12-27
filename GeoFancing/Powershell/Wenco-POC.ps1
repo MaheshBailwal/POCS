@@ -1,16 +1,16 @@
 ﻿$resourceName = "rg-wenco"
-$redisCacheName = "wenco-redis-db"
+$redisCacheName = "wenco-redis-db12"
 $locationName = "East US"
 
-$AppServicePlan="DemoWebApps"
-$webAppName = "wenco-webapp"
+$AppServicePlan="DemoWebApps12"
+$webAppName = "wenco-webapp12"
 
-$cosmosAccountName = "wenco-cosmo-testdb"
+$cosmosAccountName = "wenco-cosmo-testdb12"
 $cosmosDatabaseName = "wenco-cosmoDB"
 $cosmosContainerName = "wenco-cosmoDB-container"
 $cosmosPartionKey = "Site"
-
-$sqlServerName = "wenco-server"
+    
+$sqlServerName = "wenco-server12"
 $sqlUserName = "wencosqlserver"
 $sqlPassword = "Wenco#12345"
 $sqlDatabaseName = "wencodb"
@@ -61,7 +61,7 @@ Write-Host "Building Web App"
 & "$powerShellFolder\WebApp.ps1" -resourceName $resourceName -locationName $locationName -AppServicePlan $AppServicePlan -webAppName $webAppName -source $webAppSource -destination $webAppDestination
 
 #open web app
-start ‘https://wenco-webapp.azurewebsites.net/cosmo’
+start "https://$webAppName.azurewebsites.net/cosmo"
 
 #Ask to delete the complete the resoucre group
 $confirmToDelete = Read-Host -Prompt "Please confirm (Y/N) to delete all the resources" 
