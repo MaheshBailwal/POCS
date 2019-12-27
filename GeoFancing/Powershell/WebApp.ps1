@@ -13,11 +13,13 @@
 	[string]$destination    
 )
 
+Write-Host "webAppName:$webAppName"
+Write-Host "AppServicePlan$AppServicePlan"
 Write-Host "Checking App service plan existence"
-$appServicePlan = Get-AzAppServicePlan -Name $AppServicePlan -ResourceGroupName $resourceName -ErrorAction SilentlyContinue
-if([string]::IsNullOrEmpty($AppServicePlan.Length))
+$appServicePlan1 = Get-AzAppServicePlan -Name $AppServicePlan -ResourceGroupName $resourceName -ErrorAction SilentlyContinue
+if([string]::IsNullOrEmpty($appServicePlan1))
 {
-    Write-Host "Creating App Service plan."
+    Write-Host "Creating App Service plan.$AppServicePlan"
     New-AzAppServicePlan -Name $AppServicePlan -Location $locationName -ResourceGroupName $resourceName -Tier Free
     $appServicePlan = Get-AzAppServicePlan -Name $AppServicePlan -ResourceGroupName $resourceName -ErrorAction SilentlyContinue
 }

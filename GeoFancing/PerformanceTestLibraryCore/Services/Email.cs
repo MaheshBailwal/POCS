@@ -44,10 +44,11 @@ namespace PerformanceTestLibrary.Services
             message.Dispose();
         }
 
-        public void SendEmailWithMetricsAsync(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response)
+        public string SendEmailWithMetricsAsync(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response)
         {
             StringBuilder sb = new StringBuilder();
-
+            var info =  SystemConfiguration.FetchSystemConfiguration();
+            sb.Append(info);
             sb.AppendLine("<table border=1><tr><b><td>Data Location </td>");
 
             foreach (string name in Enum.GetNames(typeof(MetricsType)))
@@ -81,8 +82,13 @@ namespace PerformanceTestLibrary.Services
             Console.WriteLine("WRITE fILE");
 
             File.WriteAllText("Result.html", sb.ToString());
+            
             Console.WriteLine("WRITE fILE end ");
+
+          
             SendEmailAsync(emailRequest).Wait();
+
+            return sb.ToString();
         }
     }
 
@@ -93,6 +99,5 @@ namespace PerformanceTestLibrary.Services
         public string FromEmail { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
-
     }
 }

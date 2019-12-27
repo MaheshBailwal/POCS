@@ -16,18 +16,18 @@ $sqlPassword = "Wenco#12345"
 $sqlDatabaseName = "wencodb"
 $sqlServerFirewallRule = "wencoFirewallRule"
 
-$sourceRootPath="F:\New folder\POCS\GeoFancing"
+$sourceRootPath="F:\Wenco\Git\POCS\GeoFancing"
 $powerShellFolder = "$sourceRootPath\Powershell"
 
 $sqlqueryFilePath = "$powerShellFolder\SqlQuery.sql"
 
-$publishFolder ="$sourceRootPath\Hosts\WebAppHost\bin\Release\netcoreapp2.2\publish"
+$publishFolder ="$sourceRootPath\Hosts\WebAppHost\bin\Debug\netcoreapp2.2\publish"
 
 
 
 $appSettingFilePath = "$publishFolder\appsettings.json"
 $webAppSource = "$publishFolder\*"
-$webAppDestination = "$publishFolder\runtimes.zip"
+$webAppDestination = "$sourceRootPath\Hosts\WebAppHost\bin\Debug\runtimes.zip"
 
 # Check the current azure session
 $azContext = Get-AzContext

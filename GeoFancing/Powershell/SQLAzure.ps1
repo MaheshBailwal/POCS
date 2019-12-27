@@ -64,6 +64,16 @@ if(-not $firewallrule)
     New-AzSqlServerFirewallRule -ResourceGroupName $resourceName -FirewallRuleName "wencoFirewallRule" -ServerName $sqlServerName -StartIpAddress $publicIp -EndIpAddress $publicIp
 }
 
+
+$firewallruleForAll = Get-AzSqlServerFirewallRule -ResourceGroupName $resourceName -FirewallRuleName "forallips" -ServerName $sqlServerName -ErrorAction SilentlyContinue
+if(-not $firewallruleForAll)
+{    
+    Write-Host "Creating firewall rule for all IPs"    
+    New-AzSqlServerFirewallRule -ResourceGroupName $resourceName -FirewallRuleName "forallips" -ServerName $sqlServerName -StartIpAddress "0.0.0.0" -EndIpAddress "255.255.255.255"
+}
+
+
+
 #Checking if azure sql module exist
 Write-Host "Checking if azure sql module exist"
 if(Get-Module Az.Sql)
@@ -76,5 +86,8 @@ else
     Import-Module Az.Sql -Force
 }
 
+if(-not $database)
+{
 Write-Host "Invoking sql query on the server"
 Invoke-Sqlcmd -ServerInstance $server.FullyQualifiedDomainName -Database $database.DatabaseName -Username $sqlUserName -Password $sqlPassword -InputFile $queryFilePath
+}

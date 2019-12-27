@@ -17,7 +17,7 @@ namespace ConsoleApp2
         {
             try
             {
-                FetchSystemConfiguration();
+                SystemConfiguration.FetchSystemConfiguration();
 
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
@@ -54,6 +54,11 @@ namespace ConsoleApp2
             Console.ReadLine();
         }
 
+        static void AddJsonConfig()
+        {
+
+        }
+
         static void ProgressNotifiactionHandler(string message)
         {
             Console.WriteLine(message);
@@ -72,28 +77,9 @@ namespace ConsoleApp2
                     Console.WriteLine($" {metricsType.ToString()} : time in ms { metreics[metricsType]} ");
                 }
             }
-
+          
         }
 
-        static void FetchSystemConfiguration()
-        {
-            
-            int lPathindex = System.Reflection.Assembly.GetExecutingAssembly().Location.LastIndexOf("\\");
-
-            string batchfilepath = Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location.Substring(0, lPathindex), "Scripts\\Executepowershell.bat");
-            string ss = "powershell.exe " + Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location.Substring(0, lPathindex), "Scripts\\PerformTest.ps1") + " " +
-                Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location.Substring(0, lPathindex), "Scripts\\Systemconfig.txt");
-
-            StreamWriter streamWriter = new StreamWriter(batchfilepath);
-            streamWriter.Write(ss);
-            streamWriter.Close();
-            System.Diagnostics.Process.Start(batchfilepath).WaitForExit();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("********************************************************************");
-            Console.WriteLine("Performance Test executed on below system configurations: ");
-            Console.WriteLine(File.ReadAllText(Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location.Substring(0, lPathindex), "Scripts\\Systemconfig.txt")).ToString()); ;
-            Console.WriteLine("********************************************************************");
-            Console.ResetColor();
-        }
+       
     }
 }
