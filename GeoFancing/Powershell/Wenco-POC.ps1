@@ -1,16 +1,16 @@
-﻿$resourceName = "rg-wenco"
-$redisCacheName = "wenco-redis-db12"
+﻿$resourceName = "rg-wenco-13"
+$redisCacheName = "wenco-redis-db-13"
 $locationName = "East US"
 
-$AppServicePlan="DemoWebApps12"
-$webAppName = "wenco-webapp12"
+$AppServicePlan="DemoWebApps-13"
+$webAppName = "wenco-webapp-13"
 
-$cosmosAccountName = "wenco-cosmo-testdb12"
+$cosmosAccountName = "wenco-cosmo-testdb-13"
 $cosmosDatabaseName = "wenco-cosmoDB"
 $cosmosContainerName = "wenco-cosmoDB-container"
 $cosmosPartionKey = "Site"
     
-$sqlServerName = "wenco-server12"
+$sqlServerName = "wenco-server-13"
 $sqlUserName = "wencosqlserver"
 $sqlPassword = "Wenco#12345"
 $sqlDatabaseName = "wencodb"
