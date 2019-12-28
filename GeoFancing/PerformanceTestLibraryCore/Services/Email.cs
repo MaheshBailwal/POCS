@@ -71,6 +71,8 @@ namespace PerformanceTestLibrary.Services
 
             sb.AppendLine("</table>");
 
+            sb.Append("<br>Total Test Cycle Time In Min:" + TestExecuter.TotalTimeInSeconds);
+
             EmailRequest emailRequest = new EmailRequest()
             {
                 Body = sb.ToString(),
@@ -78,12 +80,11 @@ namespace PerformanceTestLibrary.Services
                 Subject = "Result"
             };
 
-            Console.WriteLine("WRITE fILE");
-
+           
+       
             File.WriteAllText("Result.html", sb.ToString());
             
-            Console.WriteLine("WRITE fILE end ");
-
+       
           
             SendEmailAsync(emailRequest).Wait();
 

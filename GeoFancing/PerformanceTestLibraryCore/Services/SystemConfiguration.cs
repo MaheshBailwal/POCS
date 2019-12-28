@@ -11,7 +11,7 @@ namespace PerformanceTestLibrary.Services
         {
             int lPathindex = System.Reflection.Assembly.GetExecutingAssembly().Location.LastIndexOf("\\");
             string batchfilepath = Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location.Substring(0, lPathindex), "Scripts\\Executepowershell.bat");
-            string ss = "powershell.exe " + "\"" + Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location.Substring(0, lPathindex), "Scripts\\PerformTest.ps1") + "\" " +
+            string ss = "powershell.exe " + "\"" + Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location.Substring(0, lPathindex), "Scripts\\SystemConfig.ps1") + "\" " +
                "\"" + Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location.Substring(0, lPathindex), "Scripts\\Systemconfig.txt") + "\"";
 
             StreamWriter streamWriter = new StreamWriter(batchfilepath);

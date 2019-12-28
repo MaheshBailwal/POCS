@@ -71,7 +71,8 @@ namespace RedisTest.Controllers
                                                                 DataStoreType.Cosmo,
                                                                 DataStoreType.FileSystem,
                                                                 DataStoreType.AzureSql,
-                                                                DataStoreType.RedisCache });
+                                                                DataStoreType.RedisCache,
+                DataStoreType.BlobStorage});
 
                 Email email = new Email();
                 var statsInfo = $"<div><b>Data Information</b></div><div>NumberOfSites : {_appSettings.NumberOfSites}" +

@@ -12,6 +12,7 @@ namespace PerformanceTestLibrary
         Dictionary<int, Site> _sites;
         Action<string> _progressNotifiaction;
         int _numberOfIteration = 0;
+        public static double TotalTimeInSeconds;
 
         public TestExecuter(Action<string> progressNotifiaction, int sitesCount, int zonesCount, int numberOfIteration)
         {
@@ -23,6 +24,9 @@ namespace PerformanceTestLibrary
         public Dictionary<DataStoreType, Dictionary<MetricsType, double>> ExecuteTest(Dictionary<string, string> parameters,
                                                                           IEnumerable<DataStoreType> dataStoreTypes)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             var metrics = new Dictionary<DataStoreType, Dictionary<MetricsType, double>>();
 
             foreach (var dataStoreType in dataStoreTypes)
@@ -55,7 +59,8 @@ namespace PerformanceTestLibrary
                         break;
                 }
             }
-
+            stopwatch.Stop();
+            TotalTimeInSeconds = stopwatch.Elapsed.TotalMinutes;
             return metrics;
         }
 
@@ -65,11 +70,18 @@ namespace PerformanceTestLibrary
 
             var count = 0;
 
-            foreach (var key in _sites.Keys)
+            //foreach (var key in _sites.Keys)
+            //{
+            //    _progressNotifiaction($"Storing progress count {++count}");
+            //    dataStore.Put(key.ToString(), _sites[key]);
+            //}
+
+            Parallel.ForEach(_sites.Keys, (key) =>
             {
-                _progressNotifiaction($"Storing progress count {++count}");
+
                 dataStore.Put(key.ToString(), _sites[key]);
-            }
+                _progressNotifiaction($"Storing progress count {++count} : {key}");
+            });
 
             return FetchDataFromDataStore(dataStore);
         }
@@ -79,11 +91,18 @@ namespace PerformanceTestLibrary
             var count = 0;
             _progressNotifiaction($"Storing data for {dataStore.ToString()} ");
 
-            foreach (var key in _sites.Keys)
-            {
-                _progressNotifiaction($"Storing progress count {++count}");
-                dataStore.Put(key.ToString(), _sites[key]);
-            }
+            //foreach (var key in _sites.Keys)
+            //{
+            //    _progressNotifiaction($"Storing progress count {++count}");
+            //    dataStore.Put(key.ToString(), _sites[key]);
+            //}
+
+            Parallel.ForEach(_sites.Keys, (key) =>
+                {
+                   
+                    dataStore.Put(key.ToString(), _sites[key]);
+                    _progressNotifiaction($"Storing progress count {++count} : {key}");
+                });
 
             return FetchDataFromDataStore(dataStore);
         }

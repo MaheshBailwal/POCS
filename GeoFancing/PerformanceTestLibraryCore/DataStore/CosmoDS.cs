@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PerformanceTestLibrary
@@ -24,7 +25,12 @@ namespace PerformanceTestLibrary
             _collectionName = collectionName;
             _endPointUrl = endPointUrl;
             _primaryKey = primaryKey;
-            documentClient = new DocumentClient(new Uri(_endPointUrl), _primaryKey);
+           
+            documentClient = new DocumentClient(new Uri(_endPointUrl), _primaryKey, new ConnectionPolicy
+            {
+                ConnectionMode = ConnectionMode.Direct,
+                ConnectionProtocol = Protocol.Tcp
+            });
             documentClient.CreateDatabaseIfNotExistsAsync(new Database { Id = _databaseName }).Wait();
             documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(_databaseName), new DocumentCollection { Id = _collectionName }).Wait();
         }
@@ -48,7 +54,15 @@ namespace PerformanceTestLibrary
 
         public void Put<T>(string key, T instance)
         {
-            PutAsync(key, instance).Wait();
+            try
+            {
+                PutAsync(key, instance).Wait();
+            }
+            catch (Exception ex)
+            {
+                Thread.Sleep(1000);
+                Put(key, instance);
+            }
         }
 
         public async Task PutAsync<T>(string key, T instance)

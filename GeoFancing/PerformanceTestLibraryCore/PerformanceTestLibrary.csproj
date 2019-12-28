@@ -20,7 +20,7 @@
     <None Update="Scripts\Executepowershell.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Scripts\PerformTest.ps1">
+    <None Update="Scripts\SystemConfig.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Scripts\Systemconfig.txt">

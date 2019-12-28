@@ -7,7 +7,7 @@ namespace PerformanceTestLibrary
     public class InMemoryCache : INonQueryableDataStore
     {
         static Dictionary<string, object> _sites;
-
+        object lockObj = new object();
         public InMemoryCache()
         {
             if (_sites == null)
@@ -29,7 +29,10 @@ namespace PerformanceTestLibrary
 
         public void Put<T>(string key, T instance)
         {
-            _sites[key] = instance;
+            lock (lockObj)
+            {
+                _sites[key] = instance;
+            }
         }
     }
 }
