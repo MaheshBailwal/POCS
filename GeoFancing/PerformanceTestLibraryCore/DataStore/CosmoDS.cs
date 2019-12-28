@@ -48,7 +48,6 @@ namespace PerformanceTestLibrary
 
         public void Put<T>(string key, T instance)
         {
-            string site = JsonConvert.SerializeObject(instance);
             PutAsync(key, instance).Wait();
         }
 

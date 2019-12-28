@@ -31,7 +31,7 @@ namespace RedisTest.Controllers
             if (sb.Length < 1)
             {
                 running = true;
-                sb.AppendLine("Strated");
+                sb.AppendLine("Processing Started.Keep on refersing page to see progress..");
                 Task.Run(() => StartTest());
             }
 
@@ -65,7 +65,7 @@ namespace RedisTest.Controllers
                 parameters["StorageConnectionstring"] = _appSettings.StorageConnectionstring;
                 parameters["ContainerName"] = _appSettings.ContainerName;
 
-                var testExecuter = new TestExecuter(ProgressNotifiactionHandler, 3, 3, 3);
+                var testExecuter = new TestExecuter(ProgressNotifiactionHandler,int.Parse( _appSettings.NumberOfSites), int.Parse(_appSettings.NumberOfZones), int.Parse(_appSettings.NumberOfIteration));
 
                 var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
                                                                 DataStoreType.Cosmo,
@@ -74,7 +74,11 @@ namespace RedisTest.Controllers
                                                                 DataStoreType.RedisCache });
 
                 Email email = new Email();
-                var html = email.SendEmailWithMetricsAsync(response,"Azure Web App Metrics");
+                var statsInfo = $"<div><b>Data Information</b></div><div>NumberOfSites : {_appSettings.NumberOfSites}" +
+                  $" NumberOfZones: {_appSettings.NumberOfZones}" +
+                  $" NumberOfFetchIteration :{_appSettings.NumberOfIteration} </div>";
+
+                var html = email.SendEmailWithMetricsAsync(response, statsInfo + "<br><u>Performace Test Excuted  on Azure Web App </u>");
                 sb.Clear();
                 sb.Append(html);
             }

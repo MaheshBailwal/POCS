@@ -64,7 +64,7 @@ namespace PerformanceTestLibrary.Services
          
                 foreach (var metricsType in metreics.Keys)
                 {
-                    sb.Append($"<td>{metreics[metricsType]}</td>");
+                    sb.Append($"<td>{Math.Round(metreics[metricsType],6)}</td>");
                 }
                 sb.Append($"</tr>");
             }

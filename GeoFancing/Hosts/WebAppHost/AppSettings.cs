@@ -15,6 +15,8 @@ namespace RedisTest
         public string AzureDBConnectionString { get; set; }
         public string StorageConnectionstring { get; set; }
         public string ContainerName { get; set; }
-
+        public string NumberOfSites { get; set; }
+        public string NumberOfZones { get; set; }
+        public string NumberOfIteration { get; set; }
     }
 }

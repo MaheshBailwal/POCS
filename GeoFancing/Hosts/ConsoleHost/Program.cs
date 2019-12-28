@@ -38,10 +38,15 @@ namespace ConsoleApp2
                                                                 DataStoreType.FileSystem,
                                                                 DataStoreType.AzureSql,
                                                                 DataStoreType.RedisCache,
-            DataStoreType.BlobStorage});
+                                                                DataStoreType.BlobStorage
+                });
 
                 Email email = new Email();
-                email.SendEmailWithMetricsAsync(response, SystemConfiguration.FetchSystemConfiguration());
+                var statsInfo = $"<div><b>Data Information</b></div><div>NumberOfSites : {ConfigurationManager.AppSettings["NumberOfSites"]}" +
+                    $" NumberOfZones: {ConfigurationManager.AppSettings["NumberOfZones"]}" +
+                    $" NumberOfFetchIteration :{ConfigurationManager.AppSettings["NumberOfIteration"]} </div>";
+
+                email.SendEmailWithMetricsAsync(response, statsInfo + SystemConfiguration.FetchSystemConfiguration());
                 PrintResult(response);
                 Console.WriteLine("Done");
 
