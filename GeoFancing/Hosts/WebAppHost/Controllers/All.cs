@@ -74,7 +74,7 @@ namespace RedisTest.Controllers
                                                                 DataStoreType.RedisCache });
 
                 Email email = new Email();
-                var html = email.SendEmailWithMetricsAsync(response);
+                var html = email.SendEmailWithMetricsAsync(response,"Azure Web App Metrics");
                 sb.Clear();
                 sb.Append(html);
             }

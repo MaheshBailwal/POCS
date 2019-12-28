@@ -44,11 +44,10 @@ namespace PerformanceTestLibrary.Services
             message.Dispose();
         }
 
-        public string SendEmailWithMetricsAsync(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response)
+        public string SendEmailWithMetricsAsync(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response, string systemInfo)
         {
             StringBuilder sb = new StringBuilder();
-            var info =  SystemConfiguration.FetchSystemConfiguration();
-            sb.Append(info);
+            sb.Append(systemInfo);
             sb.AppendLine("<table border=1><tr><b><td>Data Location </td>");
 
             foreach (string name in Enum.GetNames(typeof(MetricsType)))

@@ -17,8 +17,7 @@ namespace ConsoleApp2
         {
             try
             {
-                SystemConfiguration.FetchSystemConfiguration();
-
+              
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
                 parameters["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
@@ -42,7 +41,7 @@ namespace ConsoleApp2
             DataStoreType.BlobStorage});
 
                 Email email = new Email();
-                email.SendEmailWithMetricsAsync(response);
+                email.SendEmailWithMetricsAsync(response, SystemConfiguration.FetchSystemConfiguration());
                 PrintResult(response);
                 Console.WriteLine("Done");
 
