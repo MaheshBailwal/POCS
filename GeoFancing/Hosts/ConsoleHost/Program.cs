@@ -46,7 +46,7 @@ namespace ConsoleApp2
                     $" NumberOfZones: {ConfigurationManager.AppSettings["NumberOfZones"]}" +
                     $" NumberOfFetchIteration :{ConfigurationManager.AppSettings["NumberOfIteration"]} </div>";
 
-                email.SendEmailWithMetricsAsync(response, statsInfo + SystemConfiguration.FetchSystemConfiguration());
+                email.SendEmailWithMetricsAsync(response, "<br><b><I>Performace Test Excuted  on Azure VM With Below Configuration App </b></I>" + SystemConfiguration.FetchSystemConfiguration() + testExecuter.GetDataInfo());
                 PrintResult(response);
                 Console.WriteLine("Done");
 

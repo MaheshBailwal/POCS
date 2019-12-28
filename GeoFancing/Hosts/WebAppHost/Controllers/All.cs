@@ -75,11 +75,7 @@ namespace RedisTest.Controllers
                 DataStoreType.BlobStorage});
 
                 Email email = new Email();
-                var statsInfo = $"<div><b>Data Information</b></div><div>NumberOfSites : {_appSettings.NumberOfSites}" +
-                  $" NumberOfZones: {_appSettings.NumberOfZones}" +
-                  $" NumberOfFetchIteration :{_appSettings.NumberOfIteration} </div>";
-
-                var html = email.SendEmailWithMetricsAsync(response, statsInfo + "<br><u>Performace Test Excuted  on Azure Web App </u>");
+                var html = email.SendEmailWithMetricsAsync(response, "<br><b><I>Performace Test Excuted  on Azure Web App </b></I>" + testExecuter.GetDataInfo() + "");
                 sb.Clear();
                 sb.Append(html);
             }

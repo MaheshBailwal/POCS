@@ -11,18 +11,22 @@ namespace PerformanceTestLibrary
     {
         Dictionary<int, Site> _sites;
         Action<string> _progressNotifiaction;
-        int _numberOfIteration = 0;
         public static double TotalTimeInSeconds;
 
         public TestExecuter(Action<string> progressNotifiaction, int sitesCount, int zonesCount, int numberOfIteration)
         {
             _progressNotifiaction = progressNotifiaction;
-            _numberOfIteration = numberOfIteration;
+            NumberOfIteration = numberOfIteration;
             _sites = Util.CreateSites(sitesCount, zonesCount);
+            SitesCount = sitesCount;
+            ZonesCount = zonesCount;
         }
 
-        public Dictionary<DataStoreType, Dictionary<MetricsType, double>> ExecuteTest(Dictionary<string, string> parameters,
-                                                                          IEnumerable<DataStoreType> dataStoreTypes)
+        public int SitesCount { get; private set; }
+        public int ZonesCount { get; private set; }
+        public int NumberOfIteration { get; private set; }
+
+        public Dictionary<DataStoreType, Dictionary<MetricsType, double>> ExecuteTest(Dictionary<string, string> parameters, IEnumerable<DataStoreType> dataStoreTypes)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -64,45 +68,16 @@ namespace PerformanceTestLibrary
             return metrics;
         }
 
-        private Dictionary<MetricsType, double> RunTest(INonQueryableDataStore dataStore)
+        private Dictionary<MetricsType, double> RunTest(IDataStore dataStore)
         {
             _progressNotifiaction($"Storing data for {dataStore.ToString()} ");
-
             var count = 0;
-
-            //foreach (var key in _sites.Keys)
-            //{
-            //    _progressNotifiaction($"Storing progress count {++count}");
-            //    dataStore.Put(key.ToString(), _sites[key]);
-            //}
 
             Parallel.ForEach(_sites.Keys, (key) =>
             {
-
                 dataStore.Put(key.ToString(), _sites[key]);
                 _progressNotifiaction($"Storing progress count {++count} : {key}");
             });
-
-            return FetchDataFromDataStore(dataStore);
-        }
-
-        private Dictionary<MetricsType, double> RunTest(IQueryableDataStore dataStore)
-        {
-            var count = 0;
-            _progressNotifiaction($"Storing data for {dataStore.ToString()} ");
-
-            //foreach (var key in _sites.Keys)
-            //{
-            //    _progressNotifiaction($"Storing progress count {++count}");
-            //    dataStore.Put(key.ToString(), _sites[key]);
-            //}
-
-            Parallel.ForEach(_sites.Keys, (key) =>
-                {
-                   
-                    dataStore.Put(key.ToString(), _sites[key]);
-                    _progressNotifiaction($"Storing progress count {++count} : {key}");
-                });
 
             return FetchDataFromDataStore(dataStore);
         }
@@ -118,11 +93,10 @@ namespace PerformanceTestLibrary
 
             _progressNotifiaction($"Fetching Data From :{dataStore}");
 
-            for (var count = 1; count < _numberOfIteration; count++)
+            for (var count = 1; count < NumberOfIteration; count++)
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
 
                 var x = (count * 1 * 10) + 100;
                 var y = (count * 1 * 10) + 55;
@@ -134,7 +108,7 @@ namespace PerformanceTestLibrary
                 if (isQueryableDataStore)
                 {
                     var queryableDataStore = (IQueryableDataStore)dataStore;
-                    zones = queryableDataStore.Get<List<Zone>>(count.ToString(), x, y,width, height, out fetchTime);
+                    zones = queryableDataStore.Get<List<Zone>>(count.ToString(), x, y, width, height, out fetchTime);
                 }
                 else
                 {
@@ -146,14 +120,19 @@ namespace PerformanceTestLibrary
                 totalFetchTime += fetchTime;
                 stopwatch.Stop();
                 totalOverallTime += stopwatch.Elapsed.TotalMilliseconds;
-
             }
 
-            metrices[MetricsType.AvgDataFetchTime] = (double)(totalFetchTime / _numberOfIteration);
-            metrices[MetricsType.AvgTotalTime] = (double)(totalOverallTime / _numberOfIteration);
+            metrices[MetricsType.AvgDataFetchTime] = (double)(totalFetchTime / NumberOfIteration);
+            metrices[MetricsType.AvgTotalTime] = (double)(totalOverallTime / NumberOfIteration);
 
             return metrices;
         }
-      
+
+        public string GetDataInfo()
+        {
+            return $"<div><u>Data Information</u></div><div><i><u>NumberOfSites</i></u> : {SitesCount}" +
+             $"  <i><u>NumberOfZones</i></u>: {ZonesCount}" +
+             $"  <i><u>NumberOfFetchIteration</i></u> :{NumberOfIteration} </div>";
+        }
     }
 }

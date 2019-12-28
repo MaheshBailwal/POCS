@@ -52,7 +52,7 @@ namespace PerformanceTestLibrary.Services
 
             foreach (string name in Enum.GetNames(typeof(MetricsType)))
             {
-                sb.AppendLine($"<td>{name}</td>");
+                sb.AppendLine($"<td>{name}(in ms)</td>");
             }
             sb.Append("</b></tr>");
            
@@ -71,21 +71,17 @@ namespace PerformanceTestLibrary.Services
 
             sb.AppendLine("</table>");
 
-            sb.Append("<br>Total Test Cycle Time In Min:" + TestExecuter.TotalTimeInSeconds);
+            sb.Append("<br>Total Test Cycle Time In Min:" + Math.Round(TestExecuter.TotalTimeInSeconds,6));
 
             EmailRequest emailRequest = new EmailRequest()
             {
                 Body = sb.ToString(),
                 ToEmails = new[] { "mahesh.bailwal@rsystems.com" },
-                Subject = "Result"
+                Subject = "Performance Test Result"
             };
 
-           
-       
             File.WriteAllText("Result.html", sb.ToString());
-            
-       
-          
+           
             SendEmailAsync(emailRequest).Wait();
 
             return sb.ToString();
