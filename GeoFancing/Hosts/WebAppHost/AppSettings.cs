@@ -18,5 +18,6 @@ namespace RedisTest
         public string NumberOfSites { get; set; }
         public string NumberOfZones { get; set; }
         public string NumberOfIteration { get; set; }
+        public string ToEmails { get; set; }
     }
 }

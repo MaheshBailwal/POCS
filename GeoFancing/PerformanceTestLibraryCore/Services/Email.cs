@@ -44,7 +44,7 @@ namespace PerformanceTestLibrary.Services
             message.Dispose();
         }
 
-        public string SendEmailWithMetricsAsync(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response, string systemInfo)
+        public string SendEmailWithMetricsAsync(Dictionary<DataStoreType, Dictionary<MetricsType, double>> response, string systemInfo, string toEmails)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(systemInfo);
@@ -76,7 +76,7 @@ namespace PerformanceTestLibrary.Services
             EmailRequest emailRequest = new EmailRequest()
             {
                 Body = sb.ToString(),
-                ToEmails = new[] { "mahesh.bailwal@rsystems.com" },
+                ToEmails = toEmails.Split(";", StringSplitOptions.RemoveEmptyEntries),
                 Subject = "Performance Test Result"
             };
 

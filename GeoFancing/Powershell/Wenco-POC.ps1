@@ -17,13 +17,10 @@ $sqlDatabaseName = "wencodb"
 $sqlServerFirewallRule = "wencoFirewallRule"
 
 $sourceRootPath="F:\Wenco\Git\POCS\GeoFancing"
-$powerShellFolder = "$sourceRootPath\Powershell"
 
-$sqlqueryFilePath = "$powerShellFolder\SqlQuery.sql"
+$sqlqueryFilePath = "$PSScriptRoot\SqlQuery.sql"
 
 $publishFolder ="$sourceRootPath\Hosts\WebAppHost\bin\Debug\netcoreapp2.2\publish"
-
-
 
 $appSettingFilePath = "$publishFolder\appsettings.json"
 $webAppSource = "$publishFolder\*"
@@ -46,19 +43,22 @@ if([string]::IsNullOrEmpty($resourceGroup.ResourceGroupName))
 }
 
 Write-Host "Build Redis Cache"
-& "$powerShellFolder\RedisCache.ps1" -resourceName $resourceName -redisCacheName $redisCacheName -locationName $locationName
+& "$PSScriptRoot\RedisCache.ps1" -resourceName $resourceName -redisCacheName $redisCacheName -locationName $locationName
 
 Write-Host "Build CosmoDb Server"
-& "$powerShellFolder\CosmoDB.ps1" -resourceName $resourceName -locationName $locationName -accountName $cosmosAccountName -databaseName $cosmosDatabaseName -containerName $cosmosContainerName -partitionkey $cosmosPartionKey
+& "$PSScriptRoot\CosmoDB.ps1" -resourceName $resourceName -locationName $locationName -accountName $cosmosAccountName -databaseName $cosmosDatabaseName -containerName $cosmosContainerName -partitionkey $cosmosPartionKey
 
 Write-Host "Build SQL Azure Database"
-& "$powerShellFolder\SQLAzure.ps1" -resourceName $resourceName -locationName $locationName -sqlServerName $sqlServerName -sqlUserName $sqlUserName -sqlPassword $sqlPassword -sqlDatabaseName $sqlDatabaseName -sqlServerFirewallRule $sqlServerFirewallRule -queryFilePath $sqlqueryFilePath
+& "$PSScriptRoot\SQLAzure.ps1" -resourceName $resourceName -locationName $locationName -sqlServerName $sqlServerName -sqlUserName $sqlUserName -sqlPassword $sqlPassword -sqlDatabaseName $sqlDatabaseName -sqlServerFirewallRule $sqlServerFirewallRule -queryFilePath $sqlqueryFilePath
+
+Write-Host "Build Blob Storage"
+& "$PSScriptRoot\BlobStorage.ps1" -resourceName $resourceName -locationName $locationName -blobStorageName $blobStorageName
 
 Write-Host "Update App.Settings.Json File"
-& "$powerShellFolder\UpdateAppSettingsJson.ps1" -resourceName $resourceName -locationName $locationName -filePath $appSettingFilePath -redisCacheName $redisCacheName -cosmoAccountName $cosmosAccountName -cosmoDatabaseName $cosmosDatabaseName -cosmoContainerName $cosmosContainerName -sqlServerName $sqlServerName -sqlDatabaseName $sqlDatabaseName -sqlUserName $sqlUserName -sqlPassword $sqlPassword
+& "$PSScriptRoot\UpdateAppSettingsJson.ps1" -resourceName $resourceName -locationName $locationName -filePath $appSettingFilePath -redisCacheName $redisCacheName -cosmoAccountName $cosmosAccountName -cosmoDatabaseName $cosmosDatabaseName -cosmoContainerName $cosmosContainerName -sqlServerName $sqlServerName -sqlDatabaseName $sqlDatabaseName -sqlUserName $sqlUserName -sqlPassword $sqlPassword
 
 Write-Host "Building Web App"
-& "$powerShellFolder\WebApp.ps1" -resourceName $resourceName -locationName $locationName -AppServicePlan $AppServicePlan -webAppName $webAppName -source $webAppSource -destination $webAppDestination
+& "$PSScriptRoot\WebApp.ps1" -resourceName $resourceName -locationName $locationName -AppServicePlan $AppServicePlan -webAppName $webAppName -source $webAppSource -destination $webAppDestination
 
 #open web app
 start "https://$webAppName.azurewebsites.net/all"

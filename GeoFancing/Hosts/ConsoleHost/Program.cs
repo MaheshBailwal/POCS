@@ -27,6 +27,7 @@ namespace ConsoleApp2
                 parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
                 parameters["ContainerName"] = ConfigurationManager.AppSettings["ContainerName"];
                 parameters["StorageConnectionstring"] = ConfigurationManager.AppSettings["StorageConnectionstring"];
+                parameters["ToEmails"] = ConfigurationManager.AppSettings["ToEmails"];
 
                 var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
                    int.Parse(ConfigurationManager.AppSettings["NumberOfSites"]),
@@ -46,7 +47,7 @@ namespace ConsoleApp2
                     $" NumberOfZones: {ConfigurationManager.AppSettings["NumberOfZones"]}" +
                     $" NumberOfFetchIteration :{ConfigurationManager.AppSettings["NumberOfIteration"]} </div>";
 
-                email.SendEmailWithMetricsAsync(response, "<br><b><I>Performace Test Excuted  on Azure VM With Below Configuration App </b></I>" + SystemConfiguration.FetchSystemConfiguration() + testExecuter.GetDataInfo());
+                email.SendEmailWithMetricsAsync(response, "<br><b><I>Performace Test Excuted  on Azure VM With Below Configuration App </b></I>" + SystemConfiguration.FetchSystemConfiguration() + testExecuter.GetDataInfo(), parameters["ToEmails"]);
                 PrintResult(response);
                 Console.WriteLine("Done");
 

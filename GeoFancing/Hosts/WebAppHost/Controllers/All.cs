@@ -64,6 +64,7 @@ namespace RedisTest.Controllers
                 parameters["AzureDBConnectionString"] = _appSettings.AzureDBConnectionString;
                 parameters["StorageConnectionstring"] = _appSettings.StorageConnectionstring;
                 parameters["ContainerName"] = _appSettings.ContainerName;
+                parameters["ToEmails"] = _appSettings.ToEmails;
 
                 var testExecuter = new TestExecuter(ProgressNotifiactionHandler,int.Parse( _appSettings.NumberOfSites), int.Parse(_appSettings.NumberOfZones), int.Parse(_appSettings.NumberOfIteration));
 
@@ -75,7 +76,7 @@ namespace RedisTest.Controllers
                 DataStoreType.BlobStorage});
 
                 Email email = new Email();
-                var html = email.SendEmailWithMetricsAsync(response, "<br><b><I>Performace Test Excuted  on Azure Web App </b></I>" + testExecuter.GetDataInfo() + "");
+                var html = email.SendEmailWithMetricsAsync(response, "<br><b><I>Performace Test Excuted  on Azure Web App </b></I>" + testExecuter.GetDataInfo() + "", parameters["ToEmails"]);
                 sb.Clear();
                 sb.Append(html);
             }
