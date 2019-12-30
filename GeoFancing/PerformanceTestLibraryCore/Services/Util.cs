@@ -25,7 +25,7 @@ namespace PerformanceTestLibrary
                     zones.Add(new Zone() { Rectangle = rectangle, PolyGon = polyGon });
                 }
 
-                siteCache[site] = new Site() { SiteID = site, Zones = zones }; ;
+                siteCache[site] = new Site() { SiteID = site, Zones = zones, Name=$"Site{site}", id = Guid.NewGuid().ToString() }; ;
             }
 
             return siteCache;

@@ -36,10 +36,10 @@ namespace ConsoleApp2
 
                 var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
                                                                 DataStoreType.Cosmo,
-                                                                DataStoreType.FileSystem,
-                                                                DataStoreType.AzureSql,
-                                                                DataStoreType.RedisCache,
-                                                                DataStoreType.BlobStorage
+                                                              //  DataStoreType.FileSystem,
+                                                             //   DataStoreType.AzureSql,
+                                                             //   DataStoreType.RedisCache,
+                                                             //   DataStoreType.BlobStorage
                 });
 
                 Email email = new Email();

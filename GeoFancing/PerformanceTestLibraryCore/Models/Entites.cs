@@ -17,6 +17,7 @@ namespace PerformanceTestLibrary
         public List<Zone> Zones { get; set; }
         public int SiteID { get; set; }
         public string Name { get; set; }
+        public string id { get; set; }
     }
 
     [Serializable]
