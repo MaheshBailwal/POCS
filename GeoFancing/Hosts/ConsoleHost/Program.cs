@@ -29,6 +29,14 @@ namespace ConsoleApp2
                 parameters["StorageConnectionstring"] = ConfigurationManager.AppSettings["StorageConnectionstring"];
                 parameters["ToEmails"] = ConfigurationManager.AppSettings["ToEmails"];
 
+                // Data store flags
+                parameters["IsDataNeedToStoreInMemory"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInMemory"];
+                parameters["IsDataNeedToStoreInFileSystem"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInFileSystem"];
+                parameters["IsDataNeedToStoreInRedis"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInRedis"];
+                parameters["IsDataNeedToStoreInCosmos"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInCosmos"];
+                parameters["IsDataNeedToStoreInSQL"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInSQL"];
+                parameters["IsDataNeedToStoreInBlob"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInBlob"];
+
                 var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
                    int.Parse(ConfigurationManager.AppSettings["NumberOfSites"]),
                     int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
@@ -36,10 +44,10 @@ namespace ConsoleApp2
 
                 var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
                                                                 DataStoreType.Cosmo,
-                                                              //  DataStoreType.FileSystem,
-                                                             //   DataStoreType.AzureSql,
-                                                             //   DataStoreType.RedisCache,
-                                                             //   DataStoreType.BlobStorage
+                                                                DataStoreType.FileSystem,
+                                                                DataStoreType.AzureSql,
+                                                                DataStoreType.RedisCache,
+                                                                DataStoreType.BlobStorage
                 });
 
                 Email email = new Email();

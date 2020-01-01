@@ -39,16 +39,16 @@ namespace PerformanceTestLibrary
                 {
 
                     case DataStoreType.InMemory:
-                        metrics[DataStoreType.InMemory] = RunTest(new InMemoryCache());
+                        metrics[DataStoreType.InMemory] = RunTest(new InMemoryCache(), Convert.ToBoolean(parameters["IsDataNeedToStoreInMemory"]));
                         break;
                     case DataStoreType.RedisCache:
-                        metrics[DataStoreType.RedisCache] = RunTest(new RedisCache(new RedisConnector(parameters["RedisCacheConfig"])));
+                        metrics[DataStoreType.RedisCache] = RunTest(new RedisCache(new RedisConnector(parameters["RedisCacheConfig"])), Convert.ToBoolean(parameters["IsDataNeedToStoreInRedis"]));
                         break;
                     case DataStoreType.AzureSql:
-                        metrics[DataStoreType.AzureSql] = RunTest(new AzureSql(parameters["AzureDBConnectionString"]));
+                        metrics[DataStoreType.AzureSql] = RunTest(new AzureSql(parameters["AzureDBConnectionString"]), Convert.ToBoolean(parameters["IsDataNeedToStoreInSQL"]));
                         break;
                     case DataStoreType.FileSystem:
-                        metrics[DataStoreType.FileSystem] = RunTest(new FileSystemCache());
+                        metrics[DataStoreType.FileSystem] = RunTest(new FileSystemCache(), Convert.ToBoolean(parameters["IsDataNeedToStoreInFileSystem"]));
                         break;
                     case DataStoreType.Cosmo:
                         IQueryableDataStore cosmoDB = new CosmoDS(parameters["CosmoDatabaseName"],
@@ -56,10 +56,10 @@ namespace PerformanceTestLibrary
                             parameters["CosmoEndpointUrl"],
                             parameters["CosmoPrimaryKey"]);
 
-                        metrics[DataStoreType.Cosmo] = RunTest(cosmoDB);
+                        metrics[DataStoreType.Cosmo] = RunTest(cosmoDB, Convert.ToBoolean(parameters["IsDataNeedToStoreInCosmos"]));
                         break;
                     case DataStoreType.BlobStorage:
-                        metrics[DataStoreType.BlobStorage] = RunTest(new BlobDS(parameters["ContainerName"], parameters["StorageConnectionstring"]));
+                        metrics[DataStoreType.BlobStorage] = RunTest(new BlobDS(parameters["ContainerName"], parameters["StorageConnectionstring"]), Convert.ToBoolean(parameters["IsDataNeedToStoreInBlob"]));
                         break;
                 }
             }
@@ -68,16 +68,19 @@ namespace PerformanceTestLibrary
             return metrics;
         }
 
-        private Dictionary<MetricsType, double> RunTest(IDataStore dataStore)
+        private Dictionary<MetricsType, double> RunTest(IDataStore dataStore, bool isDataNeedToStore)
         {
-            _progressNotifiaction($"Storing data for {dataStore.ToString()} ");
-            var count = 0;
-
-            Parallel.ForEach(_sites.Keys, (key) =>
+            if (isDataNeedToStore)
             {
-                dataStore.Put(key.ToString(), _sites[key]);
-                _progressNotifiaction($"Storing progress count {++count} : {key}");
-            });
+                _progressNotifiaction($"Storing data for {dataStore.ToString()} ");
+                var count = 0;
+
+                Parallel.ForEach(_sites.Keys, (key) =>
+                {
+                    dataStore.Put(key.ToString(), _sites[key]);
+                    _progressNotifiaction($"Storing progress count {++count} : {key}");
+                });
+            }
 
             return FetchDataFromDataStore(dataStore);
         }

@@ -66,6 +66,14 @@ namespace RedisTest.Controllers
                 parameters["ContainerName"] = _appSettings.ContainerName;
                 parameters["ToEmails"] = _appSettings.ToEmails;
 
+                // Data store flags
+                parameters["IsDataNeedToStoreInMemory"] = _appSettings.IsDataNeedToStoreInMemory;
+                parameters["IsDataNeedToStoreInFileSystem"] = _appSettings.IsDataNeedToStoreInFileSystem;
+                parameters["IsDataNeedToStoreInRedis"] = _appSettings.IsDataNeedToStoreInRedis;
+                parameters["IsDataNeedToStoreInCosmos"] = _appSettings.IsDataNeedToStoreInCosmos;
+                parameters["IsDataNeedToStoreInSQL"] = _appSettings.IsDataNeedToStoreInSQL;
+                parameters["IsDataNeedToStoreInBlob"] = _appSettings.IsDataNeedToStoreInBlob;
+
                 var testExecuter = new TestExecuter(ProgressNotifiactionHandler,int.Parse( _appSettings.NumberOfSites), int.Parse(_appSettings.NumberOfZones), int.Parse(_appSettings.NumberOfIteration));
 
                 var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,

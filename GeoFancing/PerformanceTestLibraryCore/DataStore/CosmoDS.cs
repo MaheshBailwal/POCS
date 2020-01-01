@@ -76,13 +76,13 @@ namespace PerformanceTestLibrary
 
         public async Task PutAsync<T>(string key, T instance)
         {
-            await CreateSiteDocumentIfNotExistsEx(_databaseName, _collectionName, instance);
+            await CreateSiteDocumentIfNotExists(_databaseName, _collectionName, instance);
         }
 
         private async Task CreateSiteDocumentIfNotExists(string databaseName, string collectionName, object site)
         {
-            //await _documentClient.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), site);
-            await BulkInsert(site);
+            await _documentClient.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), site);
+            //await BulkInsert(site);
         }
 
         private async Task CreateSiteDocumentIfNotExistsEx(string databaseName, string collectionName, object site)

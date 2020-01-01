@@ -19,5 +19,11 @@ namespace RedisTest
         public string NumberOfZones { get; set; }
         public string NumberOfIteration { get; set; }
         public string ToEmails { get; set; }
+        public string IsDataNeedToStoreInMemory { get; set; }
+        public string IsDataNeedToStoreInFileSystem { get; set; }
+        public string IsDataNeedToStoreInRedis { get; set; }
+        public string IsDataNeedToStoreInCosmos { get; set; }
+        public string IsDataNeedToStoreInSQL { get; set; }
+        public string IsDataNeedToStoreInBlob { get; set; }
     }
 }
