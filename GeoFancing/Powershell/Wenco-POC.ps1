@@ -26,6 +26,26 @@ $appSettingFilePath = "$publishFolder\appsettings.json"
 $webAppSource = "$publishFolder\*"
 $webAppDestination = "$sourceRootPath\Hosts\WebAppHost\bin\Debug\runtimes.zip"
 
+<#-----------------------
+https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.2.0
+To run Azure PowerShell in PowerShell 5.1 on Windows:
+
+Update to Windows PowerShell 5.1 if needed. If you're on Windows 10, you already have PowerShell 5.1 installed.
+Install .NET Framework 4.7.2 or later.
+
+-----------------------#>
+
+
+# Check the NuGetPackage Provide module and installed
+Install-PackageProvider -Name NuGet -Force
+
+# Check the Az Module and installed
+$azModule = Get-InstalledModule -Name Az -ErrorAction SilentlyContinue
+if(-not $azModule)
+{
+    Install-Module -Name Az -RequiredVersion 3.0 -Force -AllowClobber
+}
+
 # Check the current azure session
 $azContext = Get-AzContext
 #echo $content

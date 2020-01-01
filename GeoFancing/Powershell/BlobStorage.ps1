@@ -12,5 +12,5 @@ $storage = Get-AzStorageAccount -ResourceGroupName $resourceName -Name $blobStor
 if(-not $storage)
 {
     Write-Host "Creating blob storage...."
-    New-AzStorageAccount -ResourceGroupName $resourceName -Location $locationName -Name $blobStorageName -Kind Storage -SkuName Standard_LRS
+    New-AzStorageAccount -ResourceGroupName $resourceName -Location $locationName -Name $blobStorageName -Kind Storage -SkuName Standard_LRS -ErrorAction Stop
 }

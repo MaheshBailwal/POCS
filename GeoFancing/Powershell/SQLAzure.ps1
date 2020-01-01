@@ -41,7 +41,7 @@ echo $server.ServerName
 if([string]::IsNullOrEmpty($server.ServerName))
 {
     Write-Host "Creating SQL server"
-    New-AzSqlServer -ResourceGroupName $resourceName -Location $locationName -ServerName $sqlServerName -ServerVersion "12.0" -SqlAdministratorCredentials $Cred
+    New-AzSqlServer -ResourceGroupName $resourceName -Location $locationName -ServerName $sqlServerName -ServerVersion "12.0" -SqlAdministratorCredentials $Cred -ErrorAction Stop
     $server = Get-AzSqlServer -ResourceGroupName $resourceName -ServerName $sqlServerName -ErrorAction SilentlyContinue
 }
 
@@ -51,7 +51,7 @@ echo $database.DatabaseName
 if(-not $database)
 {
     Write-Host "Creating SQL server database"
-    New-AzSqlDatabase -ResourceGroupName $resourceName -ServerName $sqlServerName -DatabaseName $sqlDatabaseName
+    New-AzSqlDatabase -ResourceGroupName $resourceName -ServerName $sqlServerName -DatabaseName $sqlDatabaseName -ErrorAction Stop
     $database = Get-AzSqlDatabase -ResourceGroupName $resourceName -ServerName $sqlServerName -DatabaseName $sqlDatabaseName -ErrorAction SilentlyContinue
 }
 

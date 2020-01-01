@@ -47,7 +47,7 @@ if(-not $cosmoDb)
 {  
     # Create an azure cosmos account
     Write-Host "Creating Cosmos DB Account"
-    New-CosmosDbAccount -Name $accountName -ResourceGroupName $resourceName -Location $locationName    
+    New-CosmosDbAccount -Name $accountName -ResourceGroupName $resourceName -Location $locationName -ErrorAction Stop 
     $cosmoDb = Get-AzResource -ResourceGroupName $resourceName -Name $accountName
 }
 
@@ -62,7 +62,7 @@ if(-not $cosmodatabase)
 {
     #Create a database
     Write-Host "Creating Cosmos DB Database"    
-    New-CosmosDbDatabase -Context $cosmosDbContext -Id $databaseName
+    New-CosmosDbDatabase -Context $cosmosDbContext -Id $databaseName -ErrorAction Stop
     $cosmodatabase = Get-CosmosDbDatabase -Context $cosmosDbContext
 }
 

@@ -14,6 +14,6 @@ echo $redisCache
 if([string]::IsNullOrEmpty($redisCache.Name))
 {
     Write-Host "Creating Redis cache."
-    New-AzRedisCache -ResourceGroupName $resourceName -Name $redisCacheName -Location $locationName -Size 1GB -Sku Standard -EnableNonSslPort $false
+    New-AzRedisCache -ResourceGroupName $resourceName -Name $redisCacheName -Location $locationName -Size 1GB -Sku Standard -EnableNonSslPort $false -ErrorAction Stop
     $redisCache = Get-AzRedisCache -ResourceGroupName $resourceName -Name $redisCacheName -ErrorAction SilentlyContinue    
 }
