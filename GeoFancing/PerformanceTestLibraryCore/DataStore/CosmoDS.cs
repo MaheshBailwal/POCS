@@ -82,15 +82,11 @@ namespace PerformanceTestLibrary
         private async Task CreateSiteDocumentIfNotExists(string databaseName, string collectionName, object site)
         {
             await _documentClient.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), site);
-            //await BulkInsert(site);
         }
 
         private async Task CreateSiteDocumentIfNotExistsEx(string databaseName, string collectionName, object site)
         {
-            //await _documentClient.UpsertDocumentAsync(UriFactory.CreateDocumentCollectionUri(databaseName, collectionName), site);
             _buffer.Post(JsonConvert.SerializeObject(site));
-            
-         //  await BulkInsert(site);
         }
 
         private ActionBlock<IEnumerable<string>> createActionBlock()
@@ -105,10 +101,7 @@ namespace PerformanceTestLibrary
 
         private async Task BulkInsertEx(IEnumerable<string> lst)
         {
-            //List<string> lst = new List<string>();
-            //string documentsToImportInBatch = JsonConvert.SerializeObject(instance);
-            //lst.Add(documentsToImportInBatch);
-
+         
             IBulkExecutor bulkExecutor = new BulkExecutor(_documentClient, _documentCollection);
             await bulkExecutor.InitializeAsync();
             try
@@ -123,37 +116,11 @@ namespace PerformanceTestLibrary
             }
             catch (Exception ex)
             {
-
                 throw;
             }
 
         }
-
-        private async Task BulkInsert(object instance)
-        {
-            List<string> lst = new List<string>();
-            string documentsToImportInBatch = JsonConvert.SerializeObject(instance);
-            lst.Add(documentsToImportInBatch);
-
-            IBulkExecutor bulkExecutor = new BulkExecutor(_documentClient, _documentCollection);
-            await bulkExecutor.InitializeAsync();
-            try
-            {
-                var bulkImportResponse = await bulkExecutor.BulkImportAsync(
-                                                   documents: lst,
-                                                   enableUpsert: true,
-                                                   disableAutomaticIdGeneration: true,
-                                                   maxConcurrencyPerPartitionKeyRange: null,
-                                                   maxInMemorySortingBatchSize: null,
-                                                   cancellationToken: CancellationToken.None);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
-        }
+     
     }
 }
 
