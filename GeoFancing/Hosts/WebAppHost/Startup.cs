@@ -34,8 +34,8 @@ namespace RedisTest
 
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(option => option.EnableEndpointRouting = false);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //services.AddDistributedRedisCache(options =>
             //{
             //    // These settings are to connect with Azure VM
