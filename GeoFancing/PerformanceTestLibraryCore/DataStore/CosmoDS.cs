@@ -62,10 +62,7 @@ namespace PerformanceTestLibrary
         {
             try
             {
-                lock (_databaseName)
-                {
-                    PutAsync(key, instance).Wait();
-                }
+                PutAsync(key, instance).Wait();
             }
             catch (Exception ex)
             {
@@ -91,7 +88,7 @@ namespace PerformanceTestLibrary
 
         private ActionBlock<IEnumerable<string>> createActionBlock()
         {
-     
+
             var block = new ActionBlock<IEnumerable<string>>(i =>
             {
                 BulkInsertEx(i).Wait();
@@ -101,12 +98,12 @@ namespace PerformanceTestLibrary
 
         private async Task BulkInsertEx(IEnumerable<string> lst)
         {
-         
+
             IBulkExecutor bulkExecutor = new BulkExecutor(_documentClient, _documentCollection);
             await bulkExecutor.InitializeAsync();
             try
             {
-                var bulkImportResponse =  bulkExecutor.BulkImportAsync(
+                var bulkImportResponse = bulkExecutor.BulkImportAsync(
                                                    documents: lst,
                                                    enableUpsert: true,
                                                    disableAutomaticIdGeneration: true,
@@ -120,7 +117,7 @@ namespace PerformanceTestLibrary
             }
 
         }
-     
+
     }
 }
 
