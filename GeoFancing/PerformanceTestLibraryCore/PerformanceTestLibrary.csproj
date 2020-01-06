@@ -18,13 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Scripts\Executepowershell.bat">
+    <None Update="Scripts\ExecutePowershell.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Scripts\SystemConfig.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Scripts\Systemconfig.txt">
+    <None Update="Scripts\SystemConfig.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
