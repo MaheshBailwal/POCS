@@ -3,21 +3,19 @@ using PerformanceTestLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Reflection;
+using System.Text;
 
 namespace ConsoleApp2
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             try
             {
-              
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
                 parameters["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
@@ -37,6 +35,14 @@ namespace ConsoleApp2
                 parameters["IsDataNeedToStoreInSQL"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInSQL"];
                 parameters["IsDataNeedToStoreInBlob"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInBlob"];
 
+                //Ping response check flag and keys
+                parameters["PingToRedisWithPort"] = ConfigurationManager.AppSettings["PingToRedisWithPort"];
+                parameters["PingToCosmoWithPort"] = ConfigurationManager.AppSettings["PingToCosmoWithPort"];
+                parameters["PingToSqlWithPort"] = ConfigurationManager.AppSettings["PingToSqlWithPort"];
+                parameters["PingToStorageWithPort"] = ConfigurationManager.AppSettings["PingToStorageWithPort"];
+                parameters["IsPingNeedToCheck"] = ConfigurationManager.AppSettings["IsPingNeedToCheck"];
+
+
                 var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
                    int.Parse(ConfigurationManager.AppSettings["NumberOfSites"]),
                     int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
@@ -55,7 +61,11 @@ namespace ConsoleApp2
                     $" NumberOfZones: {ConfigurationManager.AppSettings["NumberOfZones"]}" +
                     $" NumberOfFetchIteration :{ConfigurationManager.AppSettings["NumberOfIteration"]} </div>";
 
-                email.SendEmailWithMetricsAsync(response, "<br><b><I>Performace Test Excuted  on Azure VM With Below Configuration App </b></I>" + SystemConfiguration.FetchSystemConfiguration() + testExecuter.GetDataInfo(), parameters["ToEmails"]);
+                email.SendEmailWithMetricsAsync(response, 
+                    ((parameters["IsPingNeedToCheck"] != null && parameters["IsPingNeedToCheck"] == "true")?"<br><b><I>Ping response of used endpoint from Azure VM: </b></I>" + 
+                    SystemConfiguration.FetchConsumedEndpointPingResponse(parameters) : string.Empty) + 
+                    "<br></br><br><b><I>Performace Test Excuted  on Azure VM With Below Configuration App </b></I>" + SystemConfiguration.FetchSystemConfiguration() + 
+                    testExecuter.GetDataInfo(), parameters["ToEmails"]);
                 PrintResult(response);
                 Console.WriteLine("Done");
 
@@ -90,9 +100,9 @@ namespace ConsoleApp2
                     Console.WriteLine($" {metricsType.ToString()} : time in ms { metreics[metricsType]} ");
                 }
             }
-          
+
         }
 
-       
+
     }
 }

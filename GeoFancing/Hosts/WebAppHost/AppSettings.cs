@@ -25,5 +25,10 @@ namespace RedisTest
         public string IsDataNeedToStoreInCosmos { get; set; }
         public string IsDataNeedToStoreInSQL { get; set; }
         public string IsDataNeedToStoreInBlob { get; set; }
+        public string PingToRedisWithPort { get; set; }
+        public string PingToCosmoWithPort { get; set; }
+        public string PingToSqlWithPort { get; set; }
+        public string PingToStorageWithPort { get; set; }  
+        public string IsPingNeedToCheck { get; set; }
     }
 }
