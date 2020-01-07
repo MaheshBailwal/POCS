@@ -16,56 +16,16 @@ namespace ConsoleApp2
         {
             try
             {
-                Dictionary<string, string> parameters = new Dictionary<string, string>();
-                parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
-                parameters["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
-                parameters["CosmoCollectionName"] = ConfigurationManager.AppSettings["CosmoCollectionName"];
-                parameters["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
-                parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
-                parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
-                parameters["ContainerName"] = ConfigurationManager.AppSettings["ContainerName"];
-                parameters["StorageConnectionstring"] = ConfigurationManager.AppSettings["StorageConnectionstring"];
-                parameters["ToEmails"] = ConfigurationManager.AppSettings["ToEmails"];
-
-                // Data store flags
-                parameters["IsDataNeedToStoreInMemory"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInMemory"];
-                parameters["IsDataNeedToStoreInFileSystem"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInFileSystem"];
-                parameters["IsDataNeedToStoreInRedis"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInRedis"];
-                parameters["IsDataNeedToStoreInCosmos"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInCosmos"];
-                parameters["IsDataNeedToStoreInSQL"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInSQL"];
-                parameters["IsDataNeedToStoreInBlob"] = ConfigurationManager.AppSettings["IsDataNeedToStoreInBlob"];
-
-                //Ping response check flag and keys
-                parameters["PingToRedisWithPort"] = ConfigurationManager.AppSettings["PingToRedisWithPort"];
-                parameters["PingToCosmoWithPort"] = ConfigurationManager.AppSettings["PingToCosmoWithPort"];
-                parameters["PingToSqlWithPort"] = ConfigurationManager.AppSettings["PingToSqlWithPort"];
-                parameters["PingToStorageWithPort"] = ConfigurationManager.AppSettings["PingToStorageWithPort"];
-                parameters["IsPingNeedToCheck"] = ConfigurationManager.AppSettings["IsPingNeedToCheck"];
-
+                Dictionary<string, string> parameters = GetParameters();
 
                 var testExecuter = new TestExecuter(ProgressNotifiactionHandler,
-                   int.Parse(ConfigurationManager.AppSettings["NumberOfSites"]),
-                    int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
-                    int.Parse(ConfigurationManager.AppSettings["NumberOfIteration"]));
+                 int.Parse(ConfigurationManager.AppSettings["NumberOfSites"]),
+                  int.Parse(ConfigurationManager.AppSettings["NumberOfZones"]),
+                  int.Parse(ConfigurationManager.AppSettings["NumberOfIteration"]), parameters);
 
-                var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
-                                                                DataStoreType.Cosmo,
-                                                                DataStoreType.FileSystem,
-                                                                DataStoreType.AzureSql,
-                                                                DataStoreType.RedisCache,
-                                                                DataStoreType.BlobStorage
-                });
+                var response = testExecuter.ExecuteTest(ConfigurationManager.AppSettings["TestToRun"]);
 
-                Email email = new Email();
-                var statsInfo = $"<div><b>Data Information</b></div><div>NumberOfSites : {ConfigurationManager.AppSettings["NumberOfSites"]}" +
-                    $" NumberOfZones: {ConfigurationManager.AppSettings["NumberOfZones"]}" +
-                    $" NumberOfFetchIteration :{ConfigurationManager.AppSettings["NumberOfIteration"]} </div>";
-
-                email.SendEmailWithMetricsAsync(response, 
-                    ((parameters["IsPingNeedToCheck"] != null && parameters["IsPingNeedToCheck"] == "true")?"<br><b><I>Ping response of used endpoint from Azure VM: </b></I>" + 
-                    SystemConfiguration.FetchConsumedEndpointPingResponse(parameters) : string.Empty) + 
-                    "<br></br><br><b><I>Performace Test Excuted  on Azure VM With Below Configuration App </b></I>" + SystemConfiguration.FetchSystemConfiguration() + 
-                    testExecuter.GetDataInfo(), parameters["ToEmails"]);
+                SendEmail(parameters, testExecuter, response);
                 PrintResult(response);
                 Console.WriteLine("Done");
 
@@ -77,9 +37,41 @@ namespace ConsoleApp2
             Console.ReadLine();
         }
 
-        static void AddJsonConfig()
+        private static Dictionary<string, string> GetParameters()
         {
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters["RedisCacheConfig"] = ConfigurationManager.AppSettings["RedisCacheConfig"];
+            parameters["CosmoDatabaseName"] = ConfigurationManager.AppSettings["CosmoDatabaseName"];
+            parameters["CosmoCollectionName"] = ConfigurationManager.AppSettings["CosmoCollectionName"];
+            parameters["CosmoEndpointUrl"] = ConfigurationManager.AppSettings["CosmoEndpointUrl"];
+            parameters["CosmoPrimaryKey"] = ConfigurationManager.AppSettings["CosmoPrimaryKey"];
+            parameters["AzureDBConnectionString"] = ConfigurationManager.AppSettings["AzureDBConnectionString"];
+            parameters["ContainerName"] = ConfigurationManager.AppSettings["ContainerName"];
+            parameters["StorageConnectionstring"] = ConfigurationManager.AppSettings["StorageConnectionstring"];
+            parameters["ToEmails"] = ConfigurationManager.AppSettings["ToEmails"];
 
+            // Data store flags
+            parameters["DoNotPushDataToStores"] = ConfigurationManager.AppSettings["DoNotPushDataToStores"];
+       
+            //Ping response check flag and keys
+            parameters["PingToRedisWithPort"] = ConfigurationManager.AppSettings["PingToRedisWithPort"];
+            parameters["PingToCosmoWithPort"] = ConfigurationManager.AppSettings["PingToCosmoWithPort"];
+            parameters["PingToSqlWithPort"] = ConfigurationManager.AppSettings["PingToSqlWithPort"];
+            parameters["PingToStorageWithPort"] = ConfigurationManager.AppSettings["PingToStorageWithPort"];
+            parameters["IsPingNeedToCheck"] = ConfigurationManager.AppSettings["IsPingNeedToCheck"];
+            return parameters;
+        }
+
+        private static void SendEmail(Dictionary<string, string> parameters, TestExecuter testExecuter, Dictionary<DataStoreType, Dictionary<MetricsType, double>> response)
+        {
+            Email email = new Email();
+            var statsInfo = $"<div><b>Data Information</b></div><div>NumberOfSites : {ConfigurationManager.AppSettings["NumberOfSites"]}" +
+                $" NumberOfZones: {ConfigurationManager.AppSettings["NumberOfZones"]}" +
+                $" NumberOfFetchIteration :{ConfigurationManager.AppSettings["NumberOfIteration"]} </div>";
+
+            email.SendEmailWithMetricsAsync(response,
+                "<br></br><br><b><I>Performace Test Excuted  on Azure VM With Below Configuration App </b></I>" + SystemConfiguration.FetchSystemConfiguration() +
+                testExecuter.GetDataInfo(), parameters["ToEmails"]);
         }
 
         static void ProgressNotifiactionHandler(string message)
@@ -102,7 +94,5 @@ namespace ConsoleApp2
             }
 
         }
-
-
     }
 }

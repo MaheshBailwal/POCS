@@ -45,7 +45,6 @@ namespace PerformanceTestLibrary.Services
             batchfiletext.AppendLine("echo. >> " + pingrespfile);
             batchfiletext.AppendLine("echo Ping response capturing end >> " + pingrespfile);
             WritetoFile(Batchfilepath, batchfiletext.ToString());
-
             return TextToHtml(File.ReadAllText(pingrespfile).ToString());
 
         }

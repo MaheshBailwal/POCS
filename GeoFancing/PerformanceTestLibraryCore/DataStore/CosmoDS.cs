@@ -41,6 +41,8 @@ namespace PerformanceTestLibrary
             _buffer.LinkTo(tt);
         }
 
+        public DataStoreType DataStoreType => DataStoreType.Cosmo;
+
         public T Get<T>(string key, int X, int Y, int width, int height, out double fetchTime)
         {
             var stopwatch = new Stopwatch();

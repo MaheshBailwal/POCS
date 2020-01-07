@@ -18,6 +18,8 @@ namespace PerformanceTestLibrary
             _connectionString = connectionString;
         }
 
+        public DataStoreType DataStoreType => DataStoreType.AzureSql;
+
         public T Get<T>(string key, int X, int Y, int width, int height, out double fetchTime)
         {
             var stopwatch = new Stopwatch();

@@ -74,9 +74,9 @@ namespace RedisTest.Controllers
                 parameters["IsDataNeedToStoreInSQL"] = _appSettings.IsDataNeedToStoreInSQL;
                 parameters["IsDataNeedToStoreInBlob"] = _appSettings.IsDataNeedToStoreInBlob;
 
-                var testExecuter = new TestExecuter(ProgressNotifiactionHandler,int.Parse( _appSettings.NumberOfSites), int.Parse(_appSettings.NumberOfZones), int.Parse(_appSettings.NumberOfIteration));
+                var testExecuter = new TestExecuter(ProgressNotifiactionHandler,int.Parse( _appSettings.NumberOfSites), int.Parse(_appSettings.NumberOfZones), int.Parse(_appSettings.NumberOfIteration), parameters);
 
-                var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
+                var response = testExecuter.ExecuteTest(new[] { DataStoreType.InMemory,
                                                                 DataStoreType.Cosmo,
                                                                 DataStoreType.FileSystem,
                                                                 DataStoreType.AzureSql,
@@ -96,10 +96,6 @@ namespace RedisTest.Controllers
             {
                 running = false;
             }
-
-
-            //  PrintResult(response);
-
         }
 
         private void ProgressNotifiactionHandler(string message)

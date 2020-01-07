@@ -13,6 +13,7 @@ namespace PerformanceTestLibrary
         {   
            _redisConnector = redisConnector;
         }
+        public DataStoreType DataStoreType => DataStoreType.RedisCache;
 
         public T Get<T>(string key, out double fetchTime)
         {

@@ -25,6 +25,8 @@ namespace PerformanceTestLibrary
             _storageconnectionstring = storageconnectionstring;           
         }
 
+        public DataStoreType DataStoreType => DataStoreType.BlobStorage;
+
         public T Get<T>(string key, out double fetchTime)
         {
             var stopwatch = new Stopwatch();
