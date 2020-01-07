@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RedisTest.Controllers
 {
-    [Route("all")]
+    [Route("RunTest")]
     public class RunAll : Controller
     {
         static bool running;
