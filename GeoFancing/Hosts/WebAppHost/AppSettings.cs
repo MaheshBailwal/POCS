@@ -19,16 +19,15 @@ namespace RedisTest
         public string NumberOfZones { get; set; }
         public string NumberOfIteration { get; set; }
         public string ToEmails { get; set; }
-        public string IsDataNeedToStoreInMemory { get; set; }
-        public string IsDataNeedToStoreInFileSystem { get; set; }
-        public string IsDataNeedToStoreInRedis { get; set; }
-        public string IsDataNeedToStoreInCosmos { get; set; }
-        public string IsDataNeedToStoreInSQL { get; set; }
-        public string IsDataNeedToStoreInBlob { get; set; }
+        public string DoNotPushDataToStores { get; set; }
+        public string TestToRun { get; set; }
+       
         public string PingToRedisWithPort { get; set; }
         public string PingToCosmoWithPort { get; set; }
         public string PingToSqlWithPort { get; set; }
         public string PingToStorageWithPort { get; set; }  
         public string IsPingNeedToCheck { get; set; }
+      
+        
     }
 }
