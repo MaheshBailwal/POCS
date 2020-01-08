@@ -60,7 +60,7 @@ namespace RedisTest.Controllers
                 parameters["StorageConnectionstring"] = _appSettings.StorageConnectionstring;
                 parameters["ContainerName"] = _appSettings.ContainerName;
                 parameters["ToEmails"] = _appSettings.ToEmails;
-
+                parameters["FileSystemDataFolder"] = "";
                 // Data store flags
                 parameters["DoNotPushDataToStores"] = _appSettings.DoNotPushDataToStores;
           

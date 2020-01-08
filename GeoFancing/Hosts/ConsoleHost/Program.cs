@@ -59,6 +59,7 @@ namespace ConsoleApp2
             parameters["PingToSqlWithPort"] = ConfigurationManager.AppSettings["PingToSqlWithPort"];
             parameters["PingToStorageWithPort"] = ConfigurationManager.AppSettings["PingToStorageWithPort"];
             parameters["IsPingNeedToCheck"] = ConfigurationManager.AppSettings["IsPingNeedToCheck"];
+            parameters["FileSystemDataFolder"] = "";
             return parameters;
         }
 
