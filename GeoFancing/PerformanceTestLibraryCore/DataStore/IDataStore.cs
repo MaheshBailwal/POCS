@@ -3,6 +3,7 @@
     public interface IDataStore
     {
         void Put<T>(string key, T instance);
+        DataStoreType DataStoreType { get;}
     }
 
     public interface INonQueryableDataStore : IDataStore

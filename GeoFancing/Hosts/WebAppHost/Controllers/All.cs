@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace RedisTest.Controllers
 {
-    [Route("all")]
-    public class RunAll : BaseController
+    [Route("RunTest")]
+    public class RunAll : Controller
     {
-        private readonly FileSystemCache _fileSystemCache;
-        private readonly InMemoryCache _inMemoryCache;
-        private readonly RedisCache _redis;
-        private readonly AzureSql _azureDB;
-        private readonly CosmoDS _cosmoDb;
         static bool running;
         AppSettings _appSettings;
         static StringBuilder sb = new StringBuilder();
@@ -67,21 +62,12 @@ namespace RedisTest.Controllers
                 parameters["ToEmails"] = _appSettings.ToEmails;
 
                 // Data store flags
-                parameters["IsDataNeedToStoreInMemory"] = _appSettings.IsDataNeedToStoreInMemory;
-                parameters["IsDataNeedToStoreInFileSystem"] = _appSettings.IsDataNeedToStoreInFileSystem;
-                parameters["IsDataNeedToStoreInRedis"] = _appSettings.IsDataNeedToStoreInRedis;
-                parameters["IsDataNeedToStoreInCosmos"] = _appSettings.IsDataNeedToStoreInCosmos;
-                parameters["IsDataNeedToStoreInSQL"] = _appSettings.IsDataNeedToStoreInSQL;
-                parameters["IsDataNeedToStoreInBlob"] = _appSettings.IsDataNeedToStoreInBlob;
+                parameters["DoNotPushDataToStores"] = _appSettings.DoNotPushDataToStores;
+          
+                var testExecuter = new TestExecuter(ProgressNotifiactionHandler, int.Parse(_appSettings.NumberOfSites), int.Parse(_appSettings.NumberOfZones), int.Parse(_appSettings.NumberOfIteration), parameters);
 
-                var testExecuter = new TestExecuter(ProgressNotifiactionHandler,int.Parse( _appSettings.NumberOfSites), int.Parse(_appSettings.NumberOfZones), int.Parse(_appSettings.NumberOfIteration));
-
-                var response = testExecuter.ExecuteTest(parameters, new[] { DataStoreType.InMemory,
-                                                                DataStoreType.Cosmo,
-                                                                DataStoreType.FileSystem,
-                                                                DataStoreType.AzureSql,
-                                                                DataStoreType.RedisCache,
-                DataStoreType.BlobStorage});
+                var response = testExecuter.ExecuteTest(_appSettings.TestToRun);
+         
 
                 Email email = new Email();
                 var html = email.SendEmailWithMetricsAsync(response, "<br><b><I>Performace Test Excuted  on Azure Web App </b></I>" + testExecuter.GetDataInfo() + "", parameters["ToEmails"]);
@@ -96,10 +82,6 @@ namespace RedisTest.Controllers
             {
                 running = false;
             }
-
-
-            //  PrintResult(response);
-
         }
 
         private void ProgressNotifiactionHandler(string message)

@@ -1,4 +1,4 @@
-﻿$resourceName = "rg-wenco"
+﻿$resourceName = "rg-wenco-performance-test-monitoring"
 $redisCacheName = "wenco-redis-db12"
 $locationName = "East US"
 
@@ -81,7 +81,7 @@ Write-Host "Building Web App"
 & "$PSScriptRoot\WebApp.ps1" -resourceName $resourceName -locationName $locationName -AppServicePlan $AppServicePlan -webAppName $webAppName -source $webAppSource -destination $webAppDestination
 
 #open web app
-start "https://$webAppName.azurewebsites.net/all"
+start "https://$webAppName.azurewebsites.net/RunTest"
 
 #Ask to delete the complete the resoucre group
 $confirmToDelete = Read-Host -Prompt "Please confirm (Y/N) to delete all the resources" 

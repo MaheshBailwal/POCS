@@ -17,6 +17,8 @@ namespace PerformanceTestLibrary
             }
         }
 
+        public DataStoreType DataStoreType => DataStoreType.FileSystem;
+
         public T Get<T>(string key, out double fetchTime)
         {
             var stopwatch = new Stopwatch();
