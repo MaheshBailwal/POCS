@@ -50,7 +50,7 @@ namespace PerformanceTestLibrary
                         metrics[DataStoreType.AzureSql] = RunTest(new AzureSql(_parameters["AzureDBConnectionString"]));
                         break;
                     case DataStoreType.FileSystem:
-                        metrics[DataStoreType.FileSystem] = RunTest(new FileSystemCache());
+                        metrics[DataStoreType.FileSystem] = RunTest(new FileSystemCache(_parameters["FileSystemDataFolder"]));
                         break;
                     case DataStoreType.Cosmo:
                         IQueryableDataStore cosmoDB = new CosmoDS(_parameters["CosmoDatabaseName"],
@@ -70,13 +70,11 @@ namespace PerformanceTestLibrary
             return metrics;
         }
 
-
         public Dictionary<DataStoreType, Dictionary<MetricsType, double>> ExecuteTest(string dataStoreTypes)
         {
             return ExecuteTest(StringToDataStoreType(dataStoreTypes));
         }
 
-       
         private IEnumerable<DataStoreType> StringToDataStoreType(string commaSeperatedDataStoreType)
         {
             var arr = commaSeperatedDataStoreType.Split(',');
@@ -89,7 +87,6 @@ namespace PerformanceTestLibrary
 
             return dataStoreTypes;
         }
-
 
         private Dictionary<MetricsType, double> RunTest(IDataStore dataStore )
         {

@@ -7,13 +7,15 @@ namespace PerformanceTestLibrary
 {
     public class FileSystemCache : INonQueryableDataStore
     {
-        static string rootFolder = @"SiteData";
+        string _rootFolder;
 
-        public FileSystemCache()
+        public FileSystemCache(string dataRootFolder)
         {
-            if (!Directory.Exists(rootFolder))
+            _rootFolder = Path.Combine(dataRootFolder, "SiteData");
+
+            if (!Directory.Exists(_rootFolder))
             {
-                Directory.CreateDirectory(rootFolder);
+                Directory.CreateDirectory(_rootFolder);
             }
         }
 
@@ -23,7 +25,7 @@ namespace PerformanceTestLibrary
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var cacheEntry = File.ReadAllText(Path.Combine(rootFolder, key + ".json"));
+            var cacheEntry = File.ReadAllText(Path.Combine(_rootFolder, key + ".json"));
             stopwatch.Stop();
             fetchTime = stopwatch.Elapsed.TotalMilliseconds;            
             return JsonConvert.DeserializeObject<T>(cacheEntry);
@@ -32,7 +34,7 @@ namespace PerformanceTestLibrary
         public void Put<T>(string key, T instance)
         {
             var json = JsonConvert.SerializeObject(instance);
-            File.WriteAllText(Path.Combine(rootFolder, key + ".json"), json);
+            File.WriteAllText(Path.Combine(_rootFolder, key + ".json"), json);
         }
     }
 }

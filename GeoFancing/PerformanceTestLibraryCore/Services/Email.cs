@@ -80,8 +80,15 @@ namespace PerformanceTestLibrary.Services
                 Subject = "Performance Test Result"
             };
 
-            File.WriteAllText("Result.html", sb.ToString());
-           
+            try
+            {
+                File.WriteAllText("Result.html", sb.ToString());
+            }
+            catch
+            {
+                //if not able to wright file due to some access issue
+                //on some environment then ignore 
+            }
             SendEmailAsync(emailRequest).Wait();
 
             return sb.ToString();

@@ -59,43 +59,22 @@ namespace FunctionAppHost
 
         private static Dictionary<string, string> GetParameters()
         {
-            sb.AppendLine("in 1");
-            var config = new ConfigurationBuilder()
-           .SetBasePath(_context.FunctionAppDirectory)
-           .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-           .AddEnvironmentVariables()
-           .Build();
-
-            sb.AppendLine("in 2");
-
-
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            sb.AppendLine("in 3");
             parameters["RedisCacheConfig"] = GetSetting("RedisCacheConfig");
-
-            sb.AppendLine("Redis:" + parameters["RedisCacheConfig"]);
-
-            sb.AppendLine("in 4");
             parameters["CosmoDatabaseName"] = GetSetting("CosmoDatabaseName");
             parameters["CosmoCollectionName"] = GetSetting("CosmoCollectionName");
             parameters["CosmoEndpointUrl"] = GetSetting("CosmoEndpointUrl");
-            sb.AppendLine("in 5");
             parameters["CosmoPrimaryKey"] = GetSetting("CosmoPrimaryKey");
             parameters["AzureDBConnectionString"] = GetSetting("AzureDBConnectionString");
             parameters["ContainerName"] = GetSetting("ContainerName");
             parameters["StorageConnectionstring"] = GetSetting("StorageConnectionstring");
             parameters["ToEmails"] = GetSetting("ToEmails");
-
             parameters["NumberOfSites"] = GetSetting("NumberOfSites");
             parameters["NumberOfZones"] = GetSetting("NumberOfZones");
             parameters["NumberOfIteration"] = GetSetting("NumberOfIteration");
             parameters["TestToRun"] = GetSetting("TestToRun");
-            sb.AppendLine("in 6");
             parameters["DoNotPushDataToStores"] = GetSetting("DoNotPushDataToStores");
             parameters["FileSystemDataFolder"] = _context.FunctionAppDirectory;
-            
-
-            sb.AppendLine("in 7");
             return parameters;
         }
 
@@ -103,20 +82,14 @@ namespace FunctionAppHost
         {
             try
             {
-
                 var parameters = GetParameters();
-
-                sb.AppendLine("in 8");
-
                 var testExecuter = new TestExecuter(ProgressNotifiactionHandler, int.Parse(parameters["NumberOfSites"]),
                   int.Parse(parameters["NumberOfZones"]),
                   int.Parse(parameters["NumberOfIteration"]), parameters);
 
-                sb.AppendLine("in 9");
-
                 var response = testExecuter.ExecuteTest(parameters["TestToRun"]);
 
-                Email email = new Email();
+                var email = new Email();
                 var html = email.SendEmailWithMetricsAsync(response,
                     "<br><b><I>Performace Test Excuted  on Azure Function App </b></I>"
                     + testExecuter.GetDataInfo() + "", parameters["ToEmails"]);
