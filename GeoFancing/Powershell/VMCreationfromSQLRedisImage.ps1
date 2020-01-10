@@ -1,5 +1,9 @@
 ﻿
+#VMCreationFromSQLRedisImage.ps1
+#This will ask for azure portal Login credemtials
 Login-AzAccount
+
+#Once login succeded then it will swtited to Rsystem "Microsoft Azure subscription"
 Set-AzContext -Subscription "1a18fcd7-9120-42f1-a099-c647693079c4" 
 
 Write-Host "Switched to subscription Microsft Azure enterprise"
@@ -32,5 +36,8 @@ $image = New-AzImage -ImageName $imageName -ResourceGroupName $rgName -Image $im
 Write-Host "New VM creation from Image"
 
 New-AzVm -ResourceGroupName $rgName -Name $myVMfromImage -Image $image.Id -Location $location -VirtualNetworkName $VirtualNetworkName -SubnetName $SubnetName -SecurityGroupName  $SecurityGroupName -PublicIpAddressName $PublicIpAddressName  -OpenPorts $OpenPorts 
+# This will open input box inside that new userid and password can be set for VM connectivity.
+#Same credential will work for RDP connectivity with VM
+
 
 Write-Host "New VM successfuly created from Image"
