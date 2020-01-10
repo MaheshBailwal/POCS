@@ -11,9 +11,9 @@
     "AzureDBConnectionString": "Data Source=wencopocdbserver.database.windows.net;Initial Catalog=wencodb;Persist Security Info=False;User ID=wencodb;Password=NewDelhi#12345;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
     "StorageConnectionstring": "DefaultEndpointsProtocol=https;AccountName=rgwencopocdiag;AccountKey=yfedhn4RyqrTUPe7oPNszHKTwRIz1lHmJwBJmk2adEX31CcJ4LFpMXP6EaixSvAGGwdEDwWnhlUVrtYHi2dN2g==;EndpointSuffix=core.windows.net",
     "ContainerName": "performancetest",
-    "NumberOfSites": "10",
-    "NumberOfZones": "1",
-    "NumberOfIteration": "1",
+    "NumberOfSites": "1000",
+    "NumberOfZones": "200",
+    "NumberOfIteration": "100",
     "ToEmails": "mahesh.bailwal@rsystems.com",
     "DoNotPushDataToStores": "Cosmo",
     "TestToRun": "InMemory,Cosmo,FileSystem,AzureSql,BlobStorage"
