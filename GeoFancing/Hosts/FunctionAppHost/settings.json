@@ -12,11 +12,11 @@
     "StorageConnectionstring": "DefaultEndpointsProtocol=https;AccountName=rgwencopocdiag;AccountKey=yfedhn4RyqrTUPe7oPNszHKTwRIz1lHmJwBJmk2adEX31CcJ4LFpMXP6EaixSvAGGwdEDwWnhlUVrtYHi2dN2g==;EndpointSuffix=core.windows.net",
     "ContainerName": "performancetest",
     "NumberOfSites": "10",
-    "NumberOfZones": "10",
-    "NumberOfIteration": "3",
+    "NumberOfZones": "1",
+    "NumberOfIteration": "1",
     "ToEmails": "mahesh.bailwal@rsystems.com",
     "DoNotPushDataToStores": "Cosmo",
-    "TestToRun": "AzureSql,BlobStorage,Cosmo,RedisCache"
+    "TestToRun": "InMemory,Cosmo,FileSystem,AzureSql,BlobStorage"
 
   }
 }
